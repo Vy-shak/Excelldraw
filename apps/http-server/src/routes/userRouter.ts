@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { Request, Response } from "express";
-import { prismaclient } from "@repo/db/client"
+import { prisma } from "@repo/db/client"
 import bcrypt from "bcrypt"
 
 
@@ -26,7 +26,7 @@ userRouter.post('/signup', (req: Request, res: Response) => {
             const hashedPass = await bcrypt.hash(password, 5);
 
 
-            const user = await prismaclient.user.upsert({
+            const user = await prisma.user.upsert({
                 where: { email: email },
                 update: {},
                 create: {
