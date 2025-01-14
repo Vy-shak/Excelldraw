@@ -1,5 +1,6 @@
 {
   "name": "Excelldraw",
+  "type": "module",
   "private": true,
   "scripts": {
     "build": "turbo build",
