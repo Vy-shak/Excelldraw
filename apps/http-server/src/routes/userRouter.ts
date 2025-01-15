@@ -22,10 +22,9 @@ userRouter.post('/signup', (req: Request, res: Response) => {
 
 
     try {
-        async function signupUser() {
+        (async function signupUser() {
             const hashedPass = await bcrypt.hash(password, 5);
-
-
+            console.log(hashedPass)
             const user = await prisma.user.upsert({
                 where: { email: email },
                 update: {},
@@ -35,10 +34,12 @@ userRouter.post('/signup', (req: Request, res: Response) => {
                     password: hashedPass
                 }
             });
-
             console.log(user)
 
-        }
+            res.status(200).send({
+                msg: "signup done"
+            })
+        })()
     } catch (error) {
         res.send({
             err: "some error updating data to db"
