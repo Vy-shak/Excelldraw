@@ -7,10 +7,6 @@ settings:
 importers:
 
   .:
-    dependencies:
-      dotenv:
-        specifier: ^16.4.7
-        version: 16.4.7
     devDependencies:
       prettier:
         specifier: ^3.2.5
@@ -108,6 +104,9 @@ importers:
       '@types/node':
         specifier: ^22.10.7
         version: 22.10.7
+      dotenv:
+        specifier: ^16.4.7
+        version: 16.4.7
 
   packages/db:
     devDependencies:

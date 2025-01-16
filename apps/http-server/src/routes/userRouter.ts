@@ -5,6 +5,8 @@ import bcrypt from "bcrypt"
 import { JWT_SECRET } from "@repo/common/jwtSecret";
 import jwt from "jsonwebtoken"
 
+console.log("env secret is:-", JWT_SECRET);
+
 const userRouter: Router = Router();
 
 
