@@ -92,7 +92,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
             if (user) {
                 const hashedpass = await bcrypt.compare(password, user.password);
                 if (hashedpass && JWT_SECRET) {
-                    const token = await jwt.sign({ email: user.email }, JWT_SECRET);
+                    const token = await jwt.sign({ id: user.id }, JWT_SECRET);
                     res.status(200).send({
                         msg: "your jwt token generated successfully",
                         token: token

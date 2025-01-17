@@ -1,24 +1,39 @@
 import jwt from "jsonwebtoken";
+import { JwtPayload } from "jsonwebtoken";
 import { Response, NextFunction, Request } from "express";
 import { JWT_SECRET } from "@repo/common/jwtSecret";
 
 function authmiddleware(req: Request, res: Response, next: NextFunction) {
-    const authToken = req.headers["authToken"];
+    const authtoken = req.headers["authtoken"]
+    console.log(authtoken)
+    console.log(typeof authtoken)
 
-    if (authToken && typeof authToken === 'string') {
+
+    if (authtoken && typeof authtoken === 'string') {
 
         if (JWT_SECRET) {
-            const decoded = jwt.verify(authToken, JWT_SECRET);
-            if (typeof decoded === "string") {
-                req.email = decoded
-            }
+            const decoded = jwt.verify(authtoken, JWT_SECRET) as JwtPayload
+            console.log('decoded', decoded)
+            if (decoded) {
+                req.id = decoded.id;
+                next()
+            };
+        }
+        else {
+            res.status(401).send({
+                msg: "sorry some internal error",
+
+            });
+            return
         }
 
     }
-    else if (!authToken) {
+    else if (!authtoken) {
         res.status(401).send({
             err: "your token is not valid"
-        })
+
+        });
+        return
     }
 
 };

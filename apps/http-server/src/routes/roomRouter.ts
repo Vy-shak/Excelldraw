@@ -5,16 +5,50 @@ import { authmiddleware } from "../middlewares/auth";
 
 
 
-const roomRouter = Router();
+const roomRouter: Router = Router();
 
-roomRouter.post('/createRoom', authmiddleware, (req, res) => {
-    const { Roomname } = req.body;
-    const email = req.email
+roomRouter.post('/create', authmiddleware, async (req, res) => {
+    const { roomname } = req.body;
+    const id = req.id;
+    console.log(id)
+    console.log(typeof id);
+
+
+    try {
+        if (id) {
+            const room = await prisma.rooms.create({
+                data: {
+                    roomname: roomname,
+                    adminId: id,
+                }
+            });
+
+            if (!room) {
+                res.status(411).send({
+                    msg: "some error in your account"
+                });
+                return
+            };
+
+            res.send({
+                msg: 'room created successfully',
+                code: room.roomCode
+            })
+        }
+        else {
+            res.status(411).send({
+                msg: "invalid email"
+            })
+        }
+    } catch (error) {
+        res.status(411).send({
+            err: "can not create room",
+            details: error
+        })
+    }
+
 });
 
-roomRouter.post('/joinRoom', authmiddleware, (req, res) => {
-    const { Roomname } = req.body;
-    const email = req.email
-})
 
 
+export { roomRouter }
