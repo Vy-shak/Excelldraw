@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@repo/common": "workspace:*",
+    "@repo/common2": "workspace:*",
     "@repo/db": "workspace:*",
     "@repo/typescript-config": "workspace:*",
     "@types/jsonwebtoken": "^9.0.7"

@@ -4,6 +4,7 @@ import { prisma } from "@repo/db/client"
 import bcrypt from "bcrypt"
 import { JWT_SECRET } from "@repo/common/jwtSecret";
 import jwt from "jsonwebtoken"
+import { signinSchema, signupSchema } from "@repo/common2/zod"
 
 console.log("env secret is:-", JWT_SECRET);
 
@@ -15,29 +16,29 @@ userRouter.post('/signup', (req: Request, res: Response) => {
 
     const { name, email, password } = req.body;
 
-    if (!password) {
-        res.status(401).send({
-            err: "please type your password"
+    const parsedData = signupSchema.safeParse(req.body);
 
-        });
-        return
+    if (!parsedData.success) {
+        console.log(parsedData.error);
+        res.json({
+            message: "your credential is not valid"
+        })
+        return;
     }
-
 
     try {
         (async function signupUser() {
             const hashedPass = await bcrypt.hash(password, 5);
             console.log(hashedPass)
-            const user = await prisma.user.upsert({
-                where: { email: email },
-                update: {},
-                create: {
+            const user = await prisma.user.create({
+                data: {
                     email: email,
                     name: name,
                     password: hashedPass
                 }
+
             });
-            console.log(user)
+
 
             res.status(200).send({
                 msg: "signup done"
@@ -55,6 +56,16 @@ userRouter.post('/signup', (req: Request, res: Response) => {
 userRouter.post('/signin', (req: Request, res: Response) => {
 
     const { email, password } = req.body;
+
+    const parsedData = signinSchema.safeParse(req.body);
+
+    if (!parsedData.success) {
+        console.log(parsedData.error);
+        res.json({
+            message: "your credential is not valid"
+        })
+        return;
+    }
 
     if (!password) {
         res.status(401).send({
@@ -75,7 +86,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
             if (user) {
                 const hashedpass = await bcrypt.compare(password, user.password);
                 if (hashedpass && JWT_SECRET) {
-                    const token = await jwt.sign({ userId: user.id }, JWT_SECRET);
+                    const token = await jwt.sign({ userId: user.email }, JWT_SECRET);
                     res.status(200).send({
                         msg: "your jwt token generated successfully",
                         token: token
@@ -87,6 +98,11 @@ userRouter.post('/signin', (req: Request, res: Response) => {
                     })
                     return
                 }
+            }
+            else {
+                res.send({
+                    msg: "sorry no account exist on this email",
+                })
             }
         })()
     } catch (error) {
