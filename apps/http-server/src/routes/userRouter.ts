@@ -95,7 +95,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
                     const token = await jwt.sign({ id: user.id }, JWT_SECRET);
                     res.status(200).send({
                         msg: "your jwt token generated successfully",
-                        token: token
+                        token: token,
                     })
                 }
                 else if (!hashedpass) {
