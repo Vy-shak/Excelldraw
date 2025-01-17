@@ -2,16 +2,12 @@ import { WebSocketServer, WebSocket } from "ws"
 
 const wss = new WebSocketServer({ port: 8080 });
 
-interface rooms {
-    roomId: string,
-    socket: WebSocket
-}
+let allSocket = new Map();
 
-interface msg {
-    type: 'join' | 'chat',
+interface parsedData {
+    type: 'chat' | 'join',
+    message?: string
 }
-
-let allSockets: rooms[] = [];
 
 wss.on('connection', function connection(socket, Request) {
     socket.on('error', console.error);
@@ -23,15 +19,32 @@ wss.on('connection', function connection(socket, Request) {
     };
 
     if (typeof roomcode === "string") {
-        allSockets.push({ roomId: roomcode, socket: socket });
+        if (allSocket.has(roomcode)) {
+            let channel = allSocket.get(roomcode);
+            channel.push(socket);
+            allSocket.set(roomcode, channel);
+        }
+        else {
+            allSocket.set(roomcode, [socket]);
+        }
     }
 
     socket.on('message', function message(data) {
-        allSockets.map((item) => {
-            if (item.roomId === roomcode) {
-                item.socket.send(data.toString())
-            }
-        })
+        const parsedData: parsedData = JSON.parse(data as unknown as string);
+
+        const channel = allSocket.get(roomcode);
+        if (parsedData.type === 'join') {
+            channel.map((item: WebSocket) => {
+                item.send(`you are joined on the roomcode ${roomcode}`)
+            })
+        }
+        if (parsedData.type === 'chat') {
+            channel.map((item: WebSocket) => {
+                if (parsedData.message) {
+                    item.send(parsedData.message)
+                }
+            })
+        }
     });
 
 })
