@@ -29,7 +29,20 @@ userRouter.post('/signup', (req: Request, res: Response) => {
     try {
         (async function signupUser() {
             const hashedPass = await bcrypt.hash(password, 5);
-            console.log(hashedPass)
+            console.log(hashedPass);
+            const duplicate = await prisma.user.findFirst({
+                where: {
+                    email: email
+                }
+            });
+
+            if (duplicate) {
+                res.status(411).send({
+                    msg: "this mail already exist"
+                });
+                return
+            }
+
             const user = await prisma.user.create({
                 data: {
                     email: email,

@@ -10,7 +10,7 @@ function authmiddleware(req: Request, res: Response, next: NextFunction) {
         if (JWT_SECRET) {
             const decoded = jwt.verify(authToken, JWT_SECRET);
             if (typeof decoded === "string") {
-                req.userId = decoded
+                req.email = decoded
             }
         }
 
