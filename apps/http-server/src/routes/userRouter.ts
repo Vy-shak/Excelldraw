@@ -61,19 +61,12 @@ userRouter.post('/signin', (req: Request, res: Response) => {
 
     if (!parsedData.success) {
         console.log(parsedData.error);
-        res.json({
+        res.status(411).json({
             message: "your credential is not valid"
         })
         return;
     }
 
-    if (!password) {
-        res.status(401).send({
-            err: "please type your password"
-
-        });
-        return
-    }
 
 
     try {
@@ -86,7 +79,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
             if (user) {
                 const hashedpass = await bcrypt.compare(password, user.password);
                 if (hashedpass && JWT_SECRET) {
-                    const token = await jwt.sign({ userId: user.email }, JWT_SECRET);
+                    const token = await jwt.sign({ email: user.email }, JWT_SECRET);
                     res.status(200).send({
                         msg: "your jwt token generated successfully",
                         token: token
@@ -100,7 +93,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
                 }
             }
             else {
-                res.send({
+                res.status(411).send({
                     msg: "sorry no account exist on this email",
                 })
             }

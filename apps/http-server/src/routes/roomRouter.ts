@@ -9,12 +9,12 @@ const roomRouter = Router();
 
 roomRouter.post('/createRoom', authmiddleware, (req, res) => {
     const { Roomname } = req.body;
-    const userId = req.userId
+    const email = req.email
 });
 
 roomRouter.post('/joinRoom', authmiddleware, (req, res) => {
     const { Roomname } = req.body;
-    const userId = req.userId
+    const email = req.email
 })
 
 
