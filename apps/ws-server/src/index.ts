@@ -1,5 +1,6 @@
 import { WebSocketServer, WebSocket } from "ws"
 import { authCheck } from "./auth";
+import { prisma } from "@repo/db/client"
 
 const wss = new WebSocketServer({ port: 8080 });
 
@@ -15,10 +16,11 @@ interface parsedData {
     message?: string
 }
 
-wss.on('connection', function connection(socket, Request) {
+wss.on('connection', async function connection(socket, Request) {
     socket.on('error', console.error);
     const roomcode = Request.headers["roomcode"];
     const token = Request.headers["authtoken"];
+
     if (!roomcode) {
         socket.send("your roomid does not exist");
         wss.close();
@@ -28,6 +30,13 @@ wss.on('connection', function connection(socket, Request) {
 
     if (userId && roomcode) {
         if (typeof roomcode === "string") {
+            const userDetail = prisma.user.findFirst({
+                where: {
+                    id: userId
+                }
+            });
+
+
             if (allSocket.has(roomcode)) {
                 let channel = allSocket.get(roomcode);
                 channel.push({ socket: socket, userId: userId });
@@ -57,7 +66,8 @@ wss.on('connection', function connection(socket, Request) {
                     item.socket.send(parsedData.message)
                 }
             })
-        }
+        };
+
         if (parsedData.type === 'leave') {
             channel = channel.filter((item: channel) => {
                 item.userId !== userId
