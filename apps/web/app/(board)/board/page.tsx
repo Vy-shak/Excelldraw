@@ -8,41 +8,49 @@ function page() {
 
     useEffect(() => {
         let start = false;
-        let rectVal = [5, 5]
+        let rectVal = [5, 5];
+        let store = []
         if (canvasRef.current) {
             const canvas = canvasRef.current;
             let startX = 5;
             let startY = 5;
-
             let ctx = canvas.getContext("2d");
-            console.log(ctx, "hello")
             if (!ctx) return
 
 
             canvas.addEventListener("mousedown", (e) => {
-                console.log(e.clientX);
-                console.log(e.clientY);
                 start = true;
-                ctx.strokeStyle = 'white'
-                ctx?.strokeRect(e.clientX, e.clientY, 100, 100);
                 startX = e.clientX;
                 startY = e.clientY;
             });
             canvas.addEventListener('mousemove', (e) => {
                 if (start) {
-                    console.log("mouse moving", e.clientX);
-                    console.log("mouse moving", e.clientY);
                     let width = e.clientX - startX;
                     let height = e.clientY - startY;
-                    ctx.clearRect(0, 0, 800, 800)
                     ctx.strokeStyle = 'white'
+                    ctx.setLineDash([5, 3]);
+                    ctx.lineJoin = 'round';
+                    ctx.clearRect(0, 0, 800, 800)
+                    if (store) {
+                        store.map((item) => {
+                            ctx?.strokeRect(item.startX, item.startY, item.width, item.height);
+                        })
+                    }
                     ctx?.strokeRect(startX, startY, width, height);
                 }
             })
             canvas.addEventListener("mouseup", (e) => {
-                console.log(e.clientX);
-                console.log(e.clientY);
                 start = false;
+                let width = e.clientX - startX;
+                let height = e.clientY - startY;
+                ctx.strokeStyle = 'white';
+                store.push({ startX, startY, width, height });
+                console.log(store)
+                if (store) {
+                    store.map((item) => {
+                        ctx?.strokeRect(item.startX, item.startY, item.width, item.height);
+                    })
+                }
             })
         }
     }, [canvasRef])
