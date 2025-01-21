@@ -2,8 +2,7 @@
 
 import React from 'react'
 import { useRef, useEffect } from 'react'
-import { startDraw } from '../../draw';
-
+import { startDraw } from '../draw';
 function page() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
 
