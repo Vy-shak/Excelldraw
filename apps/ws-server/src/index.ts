@@ -16,10 +16,14 @@ interface parsedData {
     message?: string
 }
 
-wss.on('connection', async function connection(socket, Request) {
+wss.on('connection', async function connection(socket, req) {
     socket.on('error', console.error);
-    const roomcode = Request.headers["roomcode"];
-    const token = Request.headers["authtoken"];
+    if (!req.url) return
+    const urlParams = new URLSearchParams(req.url.split('?')[1]);
+    const token = urlParams.get('token');
+    const roomcode = urlParams.get('roomcode');
+    socket.send("you are connected to this room")
+
 
     if (!roomcode) {
         socket.send("your roomid does not exist");
