@@ -1,5 +1,5 @@
 {
-  "name": "Excelldraw",
+  "name": "@repo/excell",
   "private": true,
   "scripts": {
     "build": "turbo build",
