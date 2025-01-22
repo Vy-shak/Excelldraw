@@ -9,7 +9,9 @@
   ],
   "exports": {
     "./styles.css": "./dist/index.css",
-    "./Button": "./src/Button.tsx"
+    "./Button": "./src/Button.tsx",
+    "./Inputbox": "./src/Input.tsx",
+    "./GoogleSign": "./src/auth/Google.tsx"
   },
   "license": "MIT",
   "scripts": {

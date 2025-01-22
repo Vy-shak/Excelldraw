@@ -30,7 +30,7 @@ const Button = (props: buttonProps) => {
 
   return (
     <>
-      <button onClick={props.handleClick} className={` bg-blue-500  ${props.defaultCss} ${constants.variant[props.variant]} ${constants.size[props.size]}`}>
+      <button onClick={props.handleClick} className={` ${props.defaultCss} ${constants.variant[props.variant]} ${constants.size[props.size]}`}>
         <div className="flex w-fit  h-fit justify-center items-center leading-3">
           {props.startIcon}
           <span className="text-xs">{props.text}</span>
