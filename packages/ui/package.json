@@ -8,7 +8,8 @@
     "dist"
   ],
   "exports": {
-    "./styles.css": "./dist/index.css"
+    "./styles.css": "./dist/index.css",
+    "./Button": "./src/Button.tsx"
   },
   "license": "MIT",
   "scripts": {
