@@ -17,7 +17,7 @@ function Signup() {
         const email = emailRef.current?.value;
 
         try {
-            const signupData = await axios.post("http://localhost:3002/user/signin", {
+            const signinData = await axios.post("http://localhost:3002/user/signin", {
                 password,
                 email
             }, {
@@ -26,7 +26,10 @@ function Signup() {
                 },
             });
 
-            if (signupData.status === 200) {
+            console.log(signinData);
+
+            if (signinData.data?.token) {
+                await localStorage.setItem('token', signinData.data?.token);
                 router.push('/dashboard')
             }
         } catch (error) {
@@ -35,8 +38,8 @@ function Signup() {
     }
 
     return (
-        <div className='w-full pt-5 px-32'>
-            <div className="flex w-full flex-col space-y-4  h-fit rounded-lg bg-white py-4">
+        <div className='w-full pt-5 px-20'>
+            <div className="flex w-full px-8 flex-col space-y-4  h-fit rounded-lg bg-white py-4">
                 <div className="w-full">
                     <h5 className="text-lg text-neutral-800 font-bold">
                         <span>Get Started with ChalkSync</span><br />
@@ -44,8 +47,8 @@ function Signup() {
                     </h5>
                 </div>
                 <div className="flex justify-center space-y-3 flex-col items-center">
-                    <Input Size='normal' reference={emailRef} type='default' title='email' />
-                    <Input Size='normal' reference={passwordRef} type='password' title='password' />
+                    <Input Size='normal' place='eg: yshak' reference={emailRef} type='text' title='Email' />
+                    <Input Size='normal' place='eg: yshak@1234*' reference={passwordRef} type='password' title='password' />
                 </div>
                 <div className="w-full px-24 mt-4">
                     <div onClick={handlelogin} className='w-fit h-fit'>
