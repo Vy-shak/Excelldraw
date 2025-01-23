@@ -43,7 +43,7 @@ function Signup() {
     }
 
     return (
-        <div className='w-full pt-5 px-8'>
+        <div className='w-full pt-5 px-20'>
             <div className="flex w-full flex-col space-y-4 px-6 h-fit rounded-lg bg-white py-4">
                 <div className="w-full">
                     <h5 className="text-lg text-neutral-800 font-bold">
@@ -52,10 +52,10 @@ function Signup() {
                     </h5>
                 </div>
                 <div className="flex justify-center space-y-3 flex-col items-center">
-                    <Input Size='normal' reference={nameRef} type='default' title='name' />
-                    <Input Size='normal' reference={emailRef} type='default' title='email' />
-                    <Input Size='normal' reference={passwordRef} type='password' title='password' />
-                    <Input Size='normal' reference={confirmpassRef} type='password' title='confirm password' />
+                    <Input Size='normal' reference={nameRef} type='default' title='Name' />
+                    <Input Size='normal' reference={emailRef} type='default' title='Email' />
+                    <Input Size='normal' reference={passwordRef} type='password' title='Password' />
+                    <Input Size='normal' reference={confirmpassRef} type='password' title='Confirm password' />
                 </div>
                 <div className="w-full px-24 mt-4">
                     <div onClick={handleSignup} className='w-fit h-fit'>

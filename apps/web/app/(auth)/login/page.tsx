@@ -35,8 +35,8 @@ function Signup() {
     }
 
     return (
-        <div className='w-full pt-5 px-8'>
-            <div className="flex w-full flex-col space-y-4 px-6 h-fit rounded-lg bg-white py-4">
+        <div className='w-full pt-5 px-32'>
+            <div className="flex w-full flex-col space-y-4  h-fit rounded-lg bg-white py-4">
                 <div className="w-full">
                     <h5 className="text-lg text-neutral-800 font-bold">
                         <span>Get Started with ChalkSync</span><br />

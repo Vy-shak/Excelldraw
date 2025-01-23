@@ -1,5 +1,4 @@
 import { HtmlContext } from "next/dist/server/route-modules/pages/vendored/contexts/entrypoints";
-
 interface store {
     startX: number,
     startY: number,
@@ -28,7 +27,7 @@ export function startDraw(canvas: HTMLCanvasElement) {
             if (start) {
                 let width = e.clientX - startX;
                 let height = e.clientY - startY;
-                ctx.strokeStyle = 'white'
+                ctx.strokeStyle = 'black'
                 ctx.setLineDash([5, 3]);
                 ctx.lineJoin = 'round';
                 ctx.clearRect(0, 0, 800, 800)
