@@ -52,10 +52,10 @@ function Signup() {
                     </h5>
                 </div>
                 <div className="flex justify-center space-y-3 flex-col items-center">
-                    <Input Size='normal' reference={nameRef} type='default' title='Name' />
-                    <Input Size='normal' reference={emailRef} type='default' title='Email' />
-                    <Input Size='normal' reference={passwordRef} type='password' title='Password' />
-                    <Input Size='normal' reference={confirmpassRef} type='password' title='Confirm password' />
+                    <Input place='eg: yshak' Size='normal' reference={nameRef} type='default' title='Name' />
+                    <Input place='eg: Vyshakn29@gmail.com' Size='normal' reference={emailRef} type='default' title='Email' />
+                    <Input place='eg: 12345@gmail.com' Size='normal' reference={passwordRef} type='password' title='Password' />
+                    <Input place='eg: 12345@gmail.com' Size='normal' reference={confirmpassRef} type='password' title='Confirm password' />
                 </div>
                 <div className="w-full px-24 mt-4">
                     <div onClick={handleSignup} className='w-fit h-fit'>
