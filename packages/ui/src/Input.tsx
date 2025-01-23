@@ -2,7 +2,7 @@
 
 interface inputType {
     title?: string,
-    type?: "default" | "password"
+    type: "default" | "password"
     Size: "medium" | "normal",
     reference: React.RefObject<HTMLInputElement>;
 }
@@ -23,7 +23,7 @@ function Input({ title, type, Size, reference }: inputType) {
     return (
         <div className='flex flex-col justify-start items-start w-full m-0 p-0'>
             {title && <label className="block mb-2 text-sm font-normal text-gray-600 ">{title}</label>}
-            <input ref={reference} type="password" id="first_name" className={`${Constants.size[Size]} bg-neutral-100 text-neutral-500 border border-gray-200 pl-2  text-sm rounded-sm focus:outline-none   focus:outline-neutral-300 block w-full h-8`} placeholder={"write here"} required />
+            <input ref={reference} type={`${Constants.type[type]}`} id="first_name" className={`${Constants.size[Size]} bg-neutral-100 text-neutral-500 border border-gray-200 pl-2  text-sm rounded-sm focus:outline-none   focus:outline-neutral-300 block w-full h-8`} placeholder={"write here"} required />
         </div>
     )
 }

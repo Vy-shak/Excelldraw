@@ -17,10 +17,11 @@ function Signup() {
         const password = passwordRef.current?.value;
         const confirmpass = confirmpassRef.current?.value;
         const email = emailRef.current?.value;
+        console.log('pass', password, 'confirmpass', confirmpass)
         if (confirmpass !== password) return;
 
         try {
-            const signupData = await axios.post("http://localhost:3000/api/v1/user/signup", {
+            const signupData = await axios.post("http://localhost:3002/user/signup", {
                 name,
                 password,
                 email
@@ -29,7 +30,6 @@ function Signup() {
                     'Content-Type': 'application/json'
                 },
             });
-            console.log(signupData);
         } catch (error) {
             console.error(error);
         }
@@ -45,17 +45,19 @@ function Signup() {
                     </h5>
                 </div>
                 <div className="flex justify-center space-y-3 flex-col items-center">
-                    <Input Size='normal' reference={nameRef} title='name' />
-                    <Input Size='normal' reference={emailRef} title='email' />
-                    <Input Size='normal' reference={passwordRef} title='password' />
-                    <Input Size='normal' reference={confirmpassRef} title='confirm password' />
+                    <Input Size='normal' reference={nameRef} type='default' title='name' />
+                    <Input Size='normal' reference={emailRef} type='default' title='email' />
+                    <Input Size='normal' reference={passwordRef} type='password' title='password' />
+                    <Input Size='normal' reference={confirmpassRef} type='password' title='confirm password' />
                 </div>
                 <div className="w-full px-24 mt-4">
-                    <Button variant="primary" text="Signup" size="md" onClick={handleSignup} />
+                    <div onClick={handleSignup} className='w-fit h-fit'>
+                        <Button variant="primary" text="Signup" size="md" />
+                    </div>
                 </div>
             </div>
         </div>
-    );
+    )
 }
 
 export default Signup;
