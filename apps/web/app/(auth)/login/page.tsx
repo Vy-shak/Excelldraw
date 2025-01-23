@@ -5,6 +5,7 @@ import Input from '@repo/ui/Inputbox'
 import Google from "@repo/ui/GoogleSign"
 import { useRef } from 'react'
 import { useState } from "react";
+import axios from 'axios'
 
 
 function Login() {
@@ -22,6 +23,8 @@ function Login() {
         const password = passwordRef.current?.value
         const confirmpass = confirmpassRef.current?.value
         const email = emailRef.current?.value
+        if (confirmpass !== password) return;
+        const req = await axios.post("")
     }
     return (
         <div className='w-full pt-5 px-8'>
