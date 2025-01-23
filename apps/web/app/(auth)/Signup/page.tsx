@@ -1,11 +1,14 @@
 "use client";
 import React, { useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import Button from "@repo/ui/Button";
 import Input from '@repo/ui/Inputbox';
 import axios from 'axios';
 
 function Signup() {
     const [isSignup, setSignup] = useState(false);
+
+    const router = useRouter()
 
     const nameRef = useRef<HTMLInputElement>(null);
     const emailRef = useRef<HTMLInputElement>(null);
@@ -30,6 +33,10 @@ function Signup() {
                     'Content-Type': 'application/json'
                 },
             });
+
+            if (signupData.data.msg === 'signup done') {
+                router.push('/login')
+            }
         } catch (error) {
             console.error(error);
         }
