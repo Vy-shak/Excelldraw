@@ -4,9 +4,9 @@ interface store {
     startX: number,
     startY: number,
     radius?: number
-    width: number,
-    height: number
-    end: number
+    width?: number,
+    height?: number
+    end?: number
 }
 
 function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
@@ -40,7 +40,14 @@ function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
                         if (item.shape === 'rect') {
                             ctx?.strokeRect(item.startX, item.startY, item.width, item.height);
                         }
-                    })
+
+                        if (item.shape === 'circle') {
+                            console.log('hello')
+                            ctx.beginPath();
+                            ctx.arc(item.startX, item.startY, item.radius, 0, 6.283);
+                            ctx.stroke();
+                        }
+                    });
                 }
                 console.log(window.selectedTool)
                 if (window.selectedTool === 'rect') {
@@ -60,10 +67,10 @@ function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
             let height = e.clientY - startY;
             let radius = Math.abs(Math.max(width, height))
             ctx.strokeStyle = 'black';
-            if (tool === 'rect') {
+            if (window.selectedTool === 'rect') {
                 store.push({ shape: 'rect', startX, startY, width, height });
             }
-            else if (tool === 'circle') {
+            if (window.selectedTool == 'circle') {
                 store.push({ shape: 'circle', startX, startY, radius });
             }
             console.log(store)
@@ -72,8 +79,11 @@ function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
                     if (item.shape === 'rect') {
                         ctx?.strokeRect(item.startX, item.startY, item.width, item.height);
                     }
-                    else if (item.shape === 'circle') {
-                        ctx.arc(item.startX, item.startY, item.radius, 0, Math.PI * 2);
+                    if (item.shape === 'circle') {
+                        console.log('hello')
+                        ctx.beginPath();
+                        ctx.arc(item.startX, item.startY, item.radius, 0, 6.283);
+                        ctx.stroke();
                     }
                 })
             }
