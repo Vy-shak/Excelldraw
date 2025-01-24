@@ -33,7 +33,7 @@ function page() {
                 height: 60,
                 fill: 'transparent', // No fill
                 stroke: '#E03131',   // Border color (red)
-                strokeWidth: 4,     // Border width
+                strokeWidth: 2,     // Border width
                 strokeDashArray: [5, 5],
                 strokeUniform: true, // Dashed border with 5px gaps
             });
