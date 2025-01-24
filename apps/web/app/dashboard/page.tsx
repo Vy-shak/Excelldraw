@@ -3,6 +3,8 @@
 import React from 'react'
 import axios from 'axios'
 import { useRef } from 'react'
+import spaceCard from "@repo/ui/SpaceCard"
+import SpaceCard from '@repo/ui/SpaceCard'
 
 function Home() {
     const createNameref = useRef<HTMLInputElement>(null)
@@ -40,10 +42,7 @@ function Home() {
 
     return (
         <div>
-            <div className='flex'>
-                <span onClick={createRoom}>Createoom</span>
-                <input ref={createNameref} type='text' />
-            </div>
+            <SpaceCard type='create Space' refer={createNameref} />
             <div className='flex'>
                 <span onClick={joinRoom} >join</span>
                 <input type='text' />

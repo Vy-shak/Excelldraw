@@ -3,6 +3,7 @@
 import React from 'react'
 import { useRef, useEffect } from 'react'
 import { startDraw } from '../../draw';
+import ToolBox from "@repo/ui/Toolbox"
 
 function page() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -14,14 +15,13 @@ function page() {
     }, [canvasRef])
 
     return (
-        <>
-            <div>
-                <span style={{ color: "white" }}>rect</span>
-            </div>
-            <div style={{ width: '100vw', height: '100vh', overflow: "hidden" }}>
-                <canvas ref={canvasRef} width={800} height={800}></canvas>
-            </div>
-        </>
+        <div style={{
+            background: 'radial-gradient(circle, #dbdbdb 1px, transparent 1px)',
+            backgroundSize: '20px 20px',
+        }} className='w-screen flex justify-center items-center  h-screen overflow-hidden bg-neutral-50'>
+            <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
+            <ToolBox />
+        </div>
     )
 }
 

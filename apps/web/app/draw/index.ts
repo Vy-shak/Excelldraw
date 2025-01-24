@@ -30,7 +30,7 @@ export function startDraw(canvas: HTMLCanvasElement) {
                 ctx.strokeStyle = 'black'
                 ctx.setLineDash([5, 3]);
                 ctx.lineJoin = 'round';
-                ctx.clearRect(0, 0, 800, 800)
+                ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
                 if (store) {
                     store.map((item) => {
                         ctx?.strokeRect(item.startX, item.startY, item.width, item.height);
