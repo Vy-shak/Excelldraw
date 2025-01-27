@@ -1,6 +1,6 @@
 import React from 'react'
-import Input from '../Input'
-import Button from '../Button'
+import Input from '../general/Input'
+import Button from '../general/Button'
 
 
 interface card {
@@ -12,7 +12,7 @@ function SpaceCard({ type, refer }: card) {
     return (
         <div className='w-full flex justify-center items-center flex-col bg-white rounded-md'>
             <Input type='text' Size='normal' reference={refer} />
-            <Button text='type' variant='primary' size='md' />
+            <Button text='type' variant='primary' size='default' />
         </div>
     )
 }

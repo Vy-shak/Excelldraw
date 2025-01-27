@@ -1,5 +1,5 @@
 import React, { Dispatch, SetStateAction } from 'react'
-//@ts-ignore
+import Button from './general/Button';
 import { Type, Pencil, MoveUpLeft, Square, Circle, Slash } from 'lucide-react';
 import startDraw from '../app/draw';
 

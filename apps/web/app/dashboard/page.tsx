@@ -3,8 +3,7 @@
 import React from 'react'
 import axios from 'axios'
 import { useRef } from 'react'
-import spaceCard from "@repo/ui/SpaceCard"
-import SpaceCard from '@repo/ui/SpaceCard'
+import { SpaceCard } from '../../components'
 
 function Home() {
     const createNameref = useRef<HTMLInputElement>(null)
@@ -32,7 +31,6 @@ function Home() {
     const joinRoom = async () => {
         try {
             const socket = await new WebSocket(`ws://your-websocket-server-url?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzM3NDUzMDI4fQ.W9e97kcVQf7fGiupTLioZlsDEYEbZtxKAYxbAUlhIzU&roomcode=a3242bc9-0a2b-4962-a03e-5bd64ae7a5ab`);
-            console.log(socket);
         } catch (error) {
             console.log(error)
         }
@@ -43,10 +41,6 @@ function Home() {
     return (
         <div>
             <SpaceCard type='create Space' refer={createNameref} />
-            <div className='flex'>
-                <span onClick={joinRoom} >join</span>
-                <input type='text' />
-            </div>
         </div>
     )
 }

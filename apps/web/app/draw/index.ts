@@ -1,12 +1,13 @@
 import { HtmlContext } from "next/dist/server/route-modules/pages/vendored/contexts/entrypoints";
-interface store {
-    shape: 'rect' | 'circle'
+type store = {
+    shape: 'rect',
     startX: number,
     startY: number,
-    radius?: number
-    width?: number,
-    height?: number
-    end?: number
+    width: number,
+    height: number
+} | {
+    shape: 'circle', startX: number,
+    startY: number, radius: number,
 }
 
 function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
@@ -42,14 +43,12 @@ function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
                         }
 
                         if (item.shape === 'circle') {
-                            console.log('hello')
                             ctx.beginPath();
                             ctx.arc(item.startX, item.startY, item.radius, 0, 6.283);
                             ctx.stroke();
                         }
                     });
                 }
-                console.log(window.selectedTool)
                 if (window.selectedTool === 'rect') {
                     ctx?.strokeRect(startX, startY, width, height);
                 }
@@ -67,20 +66,22 @@ function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
             let height = e.clientY - startY;
             let radius = Math.abs(Math.max(width, height))
             ctx.strokeStyle = 'black';
+
+
             if (window.selectedTool === 'rect') {
                 store.push({ shape: 'rect', startX, startY, width, height });
             }
             if (window.selectedTool == 'circle') {
                 store.push({ shape: 'circle', startX, startY, radius });
             }
-            console.log(store)
+
+
             if (store) {
                 store.map((item) => {
                     if (item.shape === 'rect') {
                         ctx?.strokeRect(item.startX, item.startY, item.width, item.height);
                     }
                     if (item.shape === 'circle') {
-                        console.log('hello')
                         ctx.beginPath();
                         ctx.arc(item.startX, item.startY, item.radius, 0, 6.283);
                         ctx.stroke();

@@ -16,6 +16,7 @@ model User {
   updatedAt DateTime   @updatedAt
   rooms     Rooms[]
   messages  Messages[]
+  shapes    Shapes[]
 }
 
 model Rooms {
@@ -25,9 +26,19 @@ model Rooms {
   adminId  Int
   admin    User       @relation(fields: [adminId], references: [id])
   messages Messages[]
+  shapes   Shapes[]
 }
 
 model Messages {
+  id       Int    @id @default(autoincrement())
+  message  String
+  authorId Int
+  author   User   @relation(fields: [authorId], references: [id])
+  roomId   Int
+  room     Rooms  @relation(fields: [roomId], references: [id])
+}
+
+model Shapes {
   id       Int    @id @default(autoincrement())
   message  String
   authorId Int

@@ -4,6 +4,7 @@ import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
 import startDraw from '../../draw';
 import Toolbox from '../../../components/Toolbox';
+import { Airplay } from "lucide-react"
 
 function page() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
