@@ -1,26 +1,27 @@
+"use client"
+
 import React, { Dispatch, SetStateAction } from 'react'
-import Button from './general/Button';
 import { Type, Pencil, MoveUpLeft, Square, Circle, Slash } from 'lucide-react';
-import startDraw from '../app/draw';
-
-
-interface ToolBox {
-    setSelection: Dispatch<SetStateAction<string>>,
-    select: string
-
-}
+import { useAppDispatch, useAppSelector } from '../lib/store/hook';
+import { toolSwitch } from '../lib/store/draw/toolSlice';
 
 
 
-function Toolbox({ setSelection, select }: ToolBox) {
+function Toolbox() {
+    const selectedTool = useAppSelector((state) => state.tool)
+    const dispatch = useAppDispatch();
+
+    const handleSelection = (tool: string) => {
+        dispatch(toolSwitch(tool))
+    }
     return (
         <div className={`w-fit absolute cursor-pointer bottom-2 flex py-2 px-4 space-x-4 bg-white h-fit rounded-full border-2`}>
-            <Square onClick={() => setSelection('rect')} size={34} color={select === 'rect' ? '#34eb4c' : '#7E8183'} />
-            <Circle onClick={() => setSelection('circle')} size={34} color={select === 'circle' ? '#34eb4c' : '#7E8183'} />
-            <Type size={34} onClick={() => setSelection('text')} color={select === 'text' ? '#34eb4c' : '#7E8183'} />
-            <Pencil size={34} onClick={() => setSelection('pencil')} color={select === 'pencil' ? '#34eb4c' : '#7E8183'} />
-            <Slash size={34} onClick={() => setSelection('line')} color={select === 'line' ? '#34eb4c' : '#7E8183'} />
-            <MoveUpLeft onClick={() => setSelection('arrow')} size={34} color={select === 'arrow' ? '#34eb4c' : '#7E8183'} />
+            <Square onClick={() => handleSelection('rect')} size={34} color={selectedTool === 'rect' ? '#34eb4c' : '#7E8183'} />
+            <Circle onClick={() => handleSelection('circle')} size={34} color={selectedTool === 'circle' ? '#34eb4c' : '#7E8183'} />
+            <Type size={34} onClick={() => handleSelection('text')} color={selectedTool === 'text' ? '#34eb4c' : '#7E8183'} />
+            <Pencil size={34} onClick={() => handleSelection('pencil')} color={selectedTool === 'pencil' ? '#34eb4c' : '#7E8183'} />
+            <Slash size={34} onClick={() => handleSelection('line')} color={selectedTool === 'line' ? '#34eb4c' : '#7E8183'} />
+            <MoveUpLeft onClick={() => handleSelection('arrow')} size={34} color={selectedTool === 'arrow' ? '#34eb4c' : '#7E8183'} />
         </div>
     )
 }

@@ -4,7 +4,7 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 
 const toolSlice = createSlice({
     name: 'tool',
-    initialState: '',
+    initialState: 'rect',
     reducers: {
         switch: (state, action) => {
             return action.payload

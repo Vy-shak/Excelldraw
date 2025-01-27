@@ -8,12 +8,7 @@
     "dist"
   ],
   "exports": {
-    "./styles.css": "./dist/index.css",
-    "./Button": "./src/Button.tsx",
-    "./Inputbox": "./src/Input.tsx",
-    "./GoogleSign": "./src/auth/Google.tsx",
-    "./SpaceCard": "./src/dashboard/SpaceCard.tsx",
-    "./Toolbox": "./src/canvas/ToolBox.tsx"
+    "./styles.css": "./dist/index.css"
   },
   "license": "MIT",
   "scripts": {

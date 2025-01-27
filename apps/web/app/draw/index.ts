@@ -1,4 +1,4 @@
-import { HtmlContext } from "next/dist/server/route-modules/pages/vendored/contexts/entrypoints";
+
 type store = {
     shape: 'rect',
     startX: number,
@@ -10,16 +10,14 @@ type store = {
     startY: number, radius: number,
 }
 
-function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
-    console.log("from canvas", selection)
+function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
     let ctx = canvas.getContext("2d");
-
     if (ctx) {
         let start = false;
         let startX = 5;
         let startY = 5;
-        let tool = window.selectedTool
         let store: store[] = [];
+        console.log(selectedTool)
         if (!ctx) return
 
         canvas.addEventListener("mousedown", (e) => {
@@ -49,10 +47,10 @@ function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
                         }
                     });
                 }
-                if (window.selectedTool === 'rect') {
+                if (selectedTool === 'rect') {
                     ctx?.strokeRect(startX, startY, width, height);
                 }
-                else if (window.selectedTool === 'circle') {
+                else if (selectedTool === 'circle') {
                     ctx.beginPath();
                     let radius = Math.abs(Math.max(width, height))
                     ctx.arc(startX, startY, radius, 0, Math.PI * 2);
@@ -68,10 +66,14 @@ function startDraw(canvas: HTMLCanvasElement, selection: string | null) {
             ctx.strokeStyle = 'black';
 
 
-            if (window.selectedTool === 'rect') {
+            if (selectedTool === 'rect') {
+                console.log('hello rect')
+                console.log(store)
                 store.push({ shape: 'rect', startX, startY, width, height });
             }
-            if (window.selectedTool == 'circle') {
+            if (selectedTool == 'circle') {
+                console.log('hello circle')
+                console.log(store)
                 store.push({ shape: 'circle', startX, startY, radius });
             }
 
