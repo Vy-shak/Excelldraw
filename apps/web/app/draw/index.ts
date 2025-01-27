@@ -1,4 +1,5 @@
 
+
 type store = {
     shape: 'rect',
     startX: number,
@@ -10,13 +11,14 @@ type store = {
     startY: number, radius: number,
 }
 
+let store: store[] = [];
+
 function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
     let ctx = canvas.getContext("2d");
     if (ctx) {
         let start = false;
         let startX = 5;
         let startY = 5;
-        let store: store[] = [];
         console.log(selectedTool)
         if (!ctx) return
 

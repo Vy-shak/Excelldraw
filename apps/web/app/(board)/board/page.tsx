@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
-import startDraw from '../../draw';
+import startDraw from '../../draw/Index';
 import Toolbox from '../../../components/Toolbox';
 import { useAppSelector } from '../../../lib/store/hook';
 
@@ -14,13 +14,7 @@ function page() {
         if (canvasRef.current) {
             startDraw(canvasRef.current, selectedTool);
         }
-    }, [canvasRef]);
-
-    useEffect(() => {
-        if (canvasRef.current) {
-            startDraw(canvasRef.current, selectedTool);
-        }
-    }, [selectedTool]);
+    }, [canvasRef, selectedTool]);
 
 
 
