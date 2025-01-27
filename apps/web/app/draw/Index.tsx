@@ -1,5 +1,6 @@
 
 
+
 type store = {
     shape: 'rect',
     startX: number,
@@ -69,23 +70,24 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
 
 
             if (selectedTool === 'rect') {
-                console.log('hello rect')
-                console.log(store)
+                console.log('hello rect', selectedTool)
+
                 store.push({ shape: 'rect', startX, startY, width, height });
             }
+
             if (selectedTool == 'circle') {
-                console.log('hello circle')
-                console.log(store)
+                console.log('hello circle', selectedTool)
                 store.push({ shape: 'circle', startX, startY, radius });
             }
 
-
+            console.log(store)
             if (store) {
                 store.map((item) => {
                     if (item.shape === 'rect') {
                         ctx?.strokeRect(item.startX, item.startY, item.width, item.height);
                     }
                     if (item.shape === 'circle') {
+                        console.log("here", selectedTool)
                         ctx.beginPath();
                         ctx.arc(item.startX, item.startY, item.radius, 0, 6.283);
                         ctx.stroke();

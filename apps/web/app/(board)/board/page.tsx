@@ -10,11 +10,12 @@ import { useAppSelector } from '../../../lib/store/hook';
 function page() {
     const selectedTool = useAppSelector((state) => state.tool)
     const canvasRef = useRef<HTMLCanvasElement>(null);
+
     useEffect(() => {
         if (canvasRef.current) {
             startDraw(canvasRef.current, selectedTool);
         }
-    }, [canvasRef, selectedTool]);
+    }, [selectedTool]);
 
 
 
