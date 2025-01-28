@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import toolreducer from "./draw/toolSlice"
+import socketReducer from "./socket/socketSlice"
 import { toolSwitch } from "./draw/toolSlice";
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
-            tool: toolreducer
+            tool: toolreducer,
+            socket: socketReducer
         },
     })
 }

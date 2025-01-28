@@ -42,12 +42,15 @@ function Home() {
     };
 
     const joinRoom = async () => {
+        const token = await localStorage.getItem("token");
+        const roomcode = joinNameref.current?.value
         try {
-            const socket = await new WebSocket(`ws://your-websocket-server-url?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzM3NDUzMDI4fQ.W9e97kcVQf7fGiupTLioZlsDEYEbZtxKAYxbAUlhIzU&roomcode=a3242bc9-0a2b-4962-a03e-5bd64ae7a5ab`);
+            const ws = await new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${roomcode}`);
+            ws.onopen = () => {
+            }
         } catch (error) {
             console.log(error)
         }
-
     }
 
 
