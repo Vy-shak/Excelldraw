@@ -32,13 +32,37 @@ body {
   margin: 0;
 }
 
-a {
-  color: inherit;
-  text-decoration: none;
+.flexBetween {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.imgDark {
-  display: none;
+.flexcolCenter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexCenter {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.flexcolCentertop {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: center;
+}
+
+.flexcolStart {
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+  align-items: start;
 }
 
 @media (prefers-color-scheme: dark) {

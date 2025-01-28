@@ -2,7 +2,14 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "@repo/ui/styles.css";
 import StoreProvider from "./StoreProvider";
+import { Montserrat } from "next/font/google";
 
+
+const montserrat = Montserrat({
+  weight: ['100', '300', '400', '500', '600', '700'],
+  style: ['normal', 'italic'],
+  subsets: ['latin']
+})
 
 
 export const metadata: Metadata = {
@@ -17,7 +24,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body style={{ backgroundColor: "white" }} >
+      <body className={`${montserrat.className}`} style={{ backgroundColor: "#F0F1F1" }} >
         <StoreProvider>
           {children}
         </StoreProvider>

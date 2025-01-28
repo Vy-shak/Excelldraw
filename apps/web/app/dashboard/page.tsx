@@ -1,16 +1,24 @@
 "use client"
 
-import React from 'react'
+import React, { useState } from 'react'
 import axios from 'axios'
 import { useRef } from 'react'
 import { SpaceCard } from '../../components'
+import { Plus, UserPlus, Loader } from "lucide-react"
+import { useRouter } from 'next/navigation'
 
 function Home() {
+    const [loader, setLoader] = useState(false)
     const createNameref = useRef<HTMLInputElement>(null)
     const joinNameref = useRef<HTMLInputElement>(null)
+    console.log('hello', createNameref.current?.value)
+
+
     const createRoom = async () => {
+        const router = useRouter()
         try {
             if (createNameref.current?.value) {
+                setLoader(true)
                 const { data } = await axios.post('http://localhost:3002/room/create', {
                     roomname: createNameref.current.value
                 }, {
@@ -20,6 +28,11 @@ function Home() {
 
                     }
                 });
+                if (data.code) {
+                    setLoader(false);
+                    router.push(`/board?roomcode=${data.code}`)
+                }
+
                 console.log(data.code)
             }
 
@@ -39,8 +52,11 @@ function Home() {
 
 
     return (
-        <div>
-            <SpaceCard type='create Space' refer={createNameref} />
+        <div className='flexCenter w-full h-screen'>
+            <div className='flexCenter w-fit h-fit space-x-3'>
+                <SpaceCard icon={loader ? <Loader /> : <Plus />} handleClick={createRoom} type='Create space' refer={createNameref} />
+                <SpaceCard icon={loader ? <Loader /> : <UserPlus />} handleClick={joinRoom} type='Join space' refer={joinNameref} />
+            </div>
         </div>
     )
 }
