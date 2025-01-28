@@ -1,8 +1,7 @@
 "use client";
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import Button from "@repo/ui/Button";
-import Input from '@repo/ui/Inputbox';
+import { Input, Button } from '../../../components';
 import axios from 'axios';
 
 function Signup() {

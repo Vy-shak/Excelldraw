@@ -10,6 +10,13 @@ type store = {
     startY: number,
     radius: number,
 }
+    | {
+        shape: 'pencil',
+        startX: number,
+        startY: number,
+        clientX: number,
+        clientY: number,
+    }
 
 let store: store[] = [];
 
@@ -25,6 +32,10 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
         clicked = true;
         startX = e.clientX;
         startY = e.clientY;
+        if (selectedTool === 'pencil') {
+            ctx.beginPath();
+            ctx.moveTo(startX, startY);
+        }
         ctx!.strokeStyle = 'black';
     };
 
@@ -47,6 +58,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
                         ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
                         ctx!.stroke();
                     }
+
                 });
             }
 
@@ -58,6 +70,13 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
                 let radius = Math.abs(Math.max(width, height));
                 ctx!.arc(startX, startY, radius, 0, Math.PI * 2);
                 ctx!.stroke();
+            }
+            else if (selectedTool === 'pencil') {
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.stroke();
+                console.log(startX, startY, e.clientX, e.clientY)
+                store.push({ shape: 'pencil', startX: startX, startY: startY, clientX: e.clientX, clientY: e.clientY })
+                console.log('store', store)
             }
         }
     };
@@ -77,6 +96,11 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
             store.push({ shape: 'circle', startX, startY, radius });
         }
 
+        if (selectedTool === 'pencil') {
+            ctx.closePath()
+            store.push({ shape: 'pencil', startX, startY, clientX: e.clientX, clientY: e.clientY });
+        }
+
         if (store) {
             store.map((item) => {
                 if (item.shape === 'rect') {
@@ -86,6 +110,12 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
                     ctx!.beginPath();
                     ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
                     ctx!.stroke();
+                }
+                if (item.shape === 'pencil') {
+                    console.log('hello')
+                    ctx!.beginPath();
+                    ctx.lineTo(item.clientX, item.clientY)
+                    ctx.stroke();
                 }
             });
         }
