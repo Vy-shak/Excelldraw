@@ -9,13 +9,13 @@ import { useRouter } from 'next/navigation'
 
 function Home() {
     const [loader, setLoader] = useState(false)
+    const router = useRouter()
     const createNameref = useRef<HTMLInputElement>(null)
     const joinNameref = useRef<HTMLInputElement>(null)
     console.log('hello', createNameref.current?.value)
 
 
     const createRoom = async () => {
-        const router = useRouter()
         try {
             if (createNameref.current?.value) {
                 setLoader(true)
@@ -30,7 +30,7 @@ function Home() {
                 });
                 if (data.code) {
                     setLoader(false);
-                    router.push(`/board?roomcode=${data.code}`)
+                    router.push(`/canvas/vz?roomcode=${data.code}`)
                 }
 
                 console.log(data.code)
