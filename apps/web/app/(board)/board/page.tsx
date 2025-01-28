@@ -13,8 +13,13 @@ function page() {
 
     useEffect(() => {
         if (canvasRef.current) {
-            startDraw(canvasRef.current, selectedTool);
+            const cleanup = startDraw(canvasRef.current, selectedTool);
+
+            return () => {
+                if (cleanup) cleanup();
+            };
         }
+
     }, [selectedTool]);
 
 
