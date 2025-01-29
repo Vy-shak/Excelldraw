@@ -1,3 +1,5 @@
+"use client"
+
 import { Eye, EyeOff, Info } from "lucide-react"
 import { useState } from "react";
 interface inputType {

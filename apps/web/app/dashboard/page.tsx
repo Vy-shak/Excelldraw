@@ -46,8 +46,6 @@ function Home() {
         const roomcode = joinNameref.current?.value
         try {
             const ws = await new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${roomcode}`);
-            ws.onopen = () => {
-            }
         } catch (error) {
             console.log(error)
         }

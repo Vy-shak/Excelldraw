@@ -1,4 +1,4 @@
-
+"use client"
 interface buttonProps {
     variant: 'primary' | 'secondary',
     size: 'default',
