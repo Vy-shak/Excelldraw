@@ -21,15 +21,17 @@ type store = {
 let store: store[] = [];
 
 function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket) {
+    console.log("we got socket", socket)
     let ctx = canvas.getContext("2d");
     if (!ctx) return;
 
     socket.onmessage = function (event) {
         const { shape, startX, startY, width, height } = JSON.parse(event.data)
-
+        console.log(event.data)
         if (shape === 'rect') {
             ctx!.setLineDash([5, 3]);
             ctx!.strokeRect(startX, startY, width, height);
+            // store.push({ shape: 'rect', startX, startY, width, height })
         }
     }
 
@@ -98,6 +100,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
         ctx!.strokeStyle = 'black';
 
         if (selectedTool === 'rect') {
+            console.log("sending to socket")
             store.push({ shape: 'rect', startX, startY, width, height });
             const shapeData = { type: 'shape', shape: { shape: 'rect', startX, startY, width, height } }
             socket.send(JSON.stringify(shapeData));

@@ -31,7 +31,7 @@ function Home() {
                 });
                 if (data.code) {
                     setLoader(false);
-                    router.push(`/canvas/${data.code}`)
+                    router.push(`/${data.code}`)
                 }
                 console.log(data.code)
             }
@@ -44,7 +44,7 @@ function Home() {
     const joinRoom = async () => {
         const roomcode = joinNameref.current?.value;
         if (roomcode) {
-            router.push(`/canvas/${roomcode}`)
+            router.push(`/${roomcode}`)
         }
     }
 

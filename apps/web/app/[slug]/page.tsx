@@ -15,11 +15,29 @@ function page() {
         if (canvasRef.current) {
             const token = localStorage.getItem('token');
             const slug = params.slug
-            const socket = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
-            const cleanup = startDraw(canvasRef.current, selectedTool, socket);
-            return () => {
-                if (cleanup) cleanup();
-            };
+            if (token && slug) {
+                const socket = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
+
+                socket.onopen = () => {
+                    console.log("hello from socket")
+                    if (canvasRef.current) {
+                        const cleanup = startDraw(canvasRef.current, selectedTool, socket);
+
+
+                        return () => {
+                            if (cleanup) cleanup();
+                        };
+                    }
+                    else {
+                        console.log("canvasRef is not true")
+                    }
+                };
+
+            }
+            else {
+                console.log("token is not valid")
+            }
+
         }
 
     }, [selectedTool]);
