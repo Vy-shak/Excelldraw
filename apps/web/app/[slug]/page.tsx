@@ -14,7 +14,7 @@ function page() {
     useEffect(() => {
         if (canvasRef.current) {
             const cleanup = startDraw(canvasRef.current, selectedTool);
-            console.log(params)
+            console.log(params.slug)
             return () => {
                 if (cleanup) cleanup();
             };
