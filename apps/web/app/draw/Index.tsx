@@ -20,9 +20,18 @@ type store = {
 
 let store: store[] = [];
 
-function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
+function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket) {
     let ctx = canvas.getContext("2d");
     if (!ctx) return;
+
+    socket.onmessage = function (event) {
+        const { shape, startX, startY, width, height } = JSON.parse(event.data)
+
+        if (shape === 'rect') {
+            ctx!.setLineDash([5, 3]);
+            ctx!.strokeRect(startX, startY, width, height);
+        }
+    }
 
     let clicked = false;
     let startX = 5;
@@ -90,6 +99,8 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
 
         if (selectedTool === 'rect') {
             store.push({ shape: 'rect', startX, startY, width, height });
+            const shapeData = { type: 'shape', shape: { shape: 'rect', startX, startY, width, height } }
+            socket.send(JSON.stringify(shapeData));
         }
 
         if (selectedTool === 'circle') {
@@ -105,6 +116,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null) {
             store.map((item) => {
                 if (item.shape === 'rect') {
                     ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
+
                 }
                 if (item.shape === 'circle') {
                     ctx!.beginPath();

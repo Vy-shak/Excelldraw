@@ -10,11 +10,13 @@ import { useParams } from 'next/navigation';
 function page() {
     const selectedTool = useAppSelector((state) => state.tool)
     const canvasRef = useRef<HTMLCanvasElement>(null);
-    const params = useParams<{ canvas: string }>()
+    const params = useParams<{ slug: string }>();
     useEffect(() => {
         if (canvasRef.current) {
-            const cleanup = startDraw(canvasRef.current, selectedTool);
-            console.log(params.slug)
+            const token = localStorage.getItem('token');
+            const slug = params.slug
+            const socket = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
+            const cleanup = startDraw(canvasRef.current, selectedTool, socket);
             return () => {
                 if (cleanup) cleanup();
             };

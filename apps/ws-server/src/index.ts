@@ -11,10 +11,29 @@ interface channel {
     userId: number
 }
 
-interface parsedData {
-    type: 'chat' | 'join' | 'leave',
-    message?: string
+type shape = {
+    shape: 'rect',
+    startX: number,
+    startY: number,
+    width: number,
+    height: number
+} | {
+    shape: 'circle',
+    startX: number,
+    startY: number,
+    radius: number,
+} | {
+    shape: 'pencil',
+    startX: number,
+    startY: number,
+    clientX: number,
+    clientY: number,
 }
+
+type parsedData = {
+    type: 'chat',
+    message: string,
+} | { type: 'shape', shape: shape } | { type: 'join' } | { type: 'leave' }
 
 wss.on('connection', async function connection(socket, req) {
     socket.on('error', console.error);
@@ -22,7 +41,7 @@ wss.on('connection', async function connection(socket, req) {
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     const token = urlParams.get('token');
     const roomcode = urlParams.get('roomcode');
-    socket.send("you are connected to this room")
+    // socket.send("you are connected to this room")
 
 
     if (!roomcode) {
@@ -55,27 +74,27 @@ wss.on('connection', async function connection(socket, req) {
 
     socket.on('message', function message(data) {
         const parsedData: parsedData = JSON.parse(data as unknown as string);
+        console.log(parsedData)
         let channel = allSocket.get(roomcode);
 
-
-        if (parsedData.type === 'join') {
+        if (parsedData) {
             channel.map((item: channel) => {
-                item.socket.send(`you are joined on the roomcode ${roomcode}`)
-            })
-        };
-
-        if (parsedData.type === 'chat') {
-            channel.map((item: channel) => {
-                if (parsedData.message) {
+                if (parsedData.type === 'chat') {
                     item.socket.send(parsedData.message)
                 }
-            })
-        };
 
-        if (parsedData.type === 'leave') {
-            channel = channel.filter((item: channel) => {
-                item.userId !== userId
-            });
+                if (parsedData.type === 'shape') {
+                    const shapeString = JSON.stringify(parsedData.shape)
+                    console.log(shapeString)
+                    item.socket.send(shapeString)
+                }
+
+                if (parsedData.type === 'leave') {
+                    channel = channel.filter((item: channel) => {
+                        item.userId !== userId
+                    });
+                }
+            })
         }
     });
 

@@ -27,7 +27,6 @@ function Home() {
                     headers: {
                         "Content-Type": "application/json",
                         "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzM3MTEzMjI1fQ.qEyTcUlWgKnDWJITKttrfdZvliE4qGPz1t2FkuXFTmM"
-
                     }
                 });
                 if (data.code) {
