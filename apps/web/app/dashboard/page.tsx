@@ -7,6 +7,8 @@ import { SpaceCard } from '../../components'
 import { Plus, UserPlus, Loader } from "lucide-react"
 import { useRouter } from 'next/navigation'
 
+
+
 function Home() {
     const [loader, setLoader] = useState(false)
     const router = useRouter()
@@ -30,9 +32,8 @@ function Home() {
                 });
                 if (data.code) {
                     setLoader(false);
-                    router.push(`/canvas/vz?roomcode=${data.code}`)
+                    router.push(`/canvas/${data.code}`)
                 }
-
                 console.log(data.code)
             }
 
@@ -42,12 +43,9 @@ function Home() {
     };
 
     const joinRoom = async () => {
-        const token = await localStorage.getItem("token");
-        const roomcode = joinNameref.current?.value
-        try {
-            const ws = await new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${roomcode}`);
-        } catch (error) {
-            console.log(error)
+        const roomcode = joinNameref.current?.value;
+        if (roomcode) {
+            router.push(`/canvas/${roomcode}`)
         }
     }
 

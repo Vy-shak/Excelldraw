@@ -2,19 +2,19 @@
 
 import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
-import startDraw from '../../draw/Index';
-import Toolbox from '../../../components/Toolbox';
-import { useAppSelector } from '../../../lib/store/hook';
-
+import startDraw from '../draw/Index';
+import { Toolbox } from '../../components';
+import { useAppSelector } from '../../lib/store/hook';
+import { useParams } from 'next/navigation';
 
 function page() {
     const selectedTool = useAppSelector((state) => state.tool)
     const canvasRef = useRef<HTMLCanvasElement>(null);
-
+    const params = useParams<{ canvas: string }>()
     useEffect(() => {
         if (canvasRef.current) {
             const cleanup = startDraw(canvasRef.current, selectedTool);
-
+            console.log(params)
             return () => {
                 if (cleanup) cleanup();
             };
