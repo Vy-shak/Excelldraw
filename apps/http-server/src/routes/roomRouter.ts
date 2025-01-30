@@ -16,24 +16,32 @@ roomRouter.post('/create', authmiddleware, async (req, res) => {
 
     try {
         if (id) {
-            const room = await prisma.rooms.create({
-                data: {
-                    roomname: roomname,
-                    adminId: id,
+            const admindata = await prisma.user.findFirst({
+                where: {
+                    id: id
                 }
             });
-
-            if (!room) {
-                res.status(411).send({
-                    msg: "some error in your account"
+            if (admindata) {
+                const room = await prisma.rooms.create({
+                    data: {
+                        roomname: roomname,
+                        adminId: id,
+                    }
                 });
-                return
-            };
 
-            res.send({
-                msg: 'room created successfully',
-                code: room.roomCode
-            })
+                if (!room) {
+                    res.status(411).send({
+                        msg: "some error in your account"
+                    });
+                    return
+                };
+
+                res.send({
+                    msg: 'room created successfully',
+                    code: room.roomCode,
+                    admindata: admindata
+                })
+            }
         }
         else {
             res.status(411).send({

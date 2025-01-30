@@ -1,11 +1,12 @@
 import { configureStore } from "@reduxjs/toolkit";
 import toolreducer from "./draw/toolSlice"
-import { toolSwitch } from "./draw/toolSlice";
+import userReducer from "./user/userdataSlice"
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             tool: toolreducer,
+            userData: userReducer
         },
     })
 }

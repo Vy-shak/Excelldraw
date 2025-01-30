@@ -6,6 +6,9 @@ import { useRef } from 'react'
 import { SpaceCard } from '../../components'
 import { Plus, UserPlus, Loader } from "lucide-react"
 import { useRouter } from 'next/navigation'
+import { AppDispatch } from '../../lib/store/store'
+import { useAppDispatch } from '../../lib/store/hook'
+import { addUserdata } from '../../lib/store/user/userdataSlice'
 
 
 
@@ -14,6 +17,7 @@ function Home() {
     const router = useRouter()
     const createNameref = useRef<HTMLInputElement>(null)
     const joinNameref = useRef<HTMLInputElement>(null)
+    const dispatch = useAppDispatch()
     console.log('hello', createNameref.current?.value)
 
 
@@ -29,9 +33,14 @@ function Home() {
                         "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzM3MTEzMjI1fQ.qEyTcUlWgKnDWJITKttrfdZvliE4qGPz1t2FkuXFTmM"
                     }
                 });
-                if (data.code) {
-                    setLoader(false);
-                    router.push(`/${data.code}`)
+                if (data.admindata) {
+                    const roomName = createNameref.current?.value;
+                    const { name, email } = data.admindata
+                    dispatch(addUserdata({ roomName: roomName, admin: name, email: email }));
+                    if (data.code) {
+                        setLoader(false);
+                        router.push(`/${data.code}`)
+                    }
                 }
                 console.log(data.code)
             }
