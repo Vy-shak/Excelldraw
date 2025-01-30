@@ -38,11 +38,27 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     let clicked = false;
     let startX = 5;
     let startY = 5;
+    let text = '';
+    let textX = 5;
+    let textY = 5;
+
+    const handleText = (e: KeyboardEvent) => {
+        if (selectedTool === 'text') {
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
+            text = text + e.key
+            ctx.font = "16px Arial";
+            ctx.fillStyle = "black";
+            ctx.fillText(text, startX, startY);
+        }
+    }
 
     const handleMousedown = (e: MouseEvent) => {
         clicked = true;
         startX = e.clientX;
         startY = e.clientY;
+        if (text) {
+            text = '';
+        }
         if (selectedTool === 'pencil') {
             ctx.beginPath();
             ctx.moveTo(startX, startY);
@@ -139,11 +155,15 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     canvas.addEventListener("mousedown", handleMousedown);
     canvas.addEventListener("mousemove", handleMousemove);
     canvas.addEventListener("mouseup", handleMouseup);
+    canvas.addEventListener("keydown", handleText);
+    canvas.tabIndex = 0;
+    canvas.focus();
 
     return () => {
         canvas.removeEventListener("mousedown", handleMousedown);
         canvas.removeEventListener("mousemove", handleMousemove);
         canvas.removeEventListener("mouseup", handleMouseup);
+        canvas.removeEventListener("keydown", handleText);
     };
 }
 
