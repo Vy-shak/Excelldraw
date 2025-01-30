@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
 import startDraw from '../draw/Index';
-import { Toolbox } from '../../components';
+import { Toolbox, Topbar } from '../../components';
 import { useAppSelector } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
 
@@ -52,6 +52,7 @@ function page() {
             background: 'radial-gradient(circle, #dbdbdb 1px, transparent 1px)',
             backgroundSize: '20px 20px',
         }} className='w-screen flex flex-col justify-center items-center  h-screen overflow-hidden bg-neutral-50'>
+            <Topbar />
             <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
             {<Toolbox />}
         </div>
