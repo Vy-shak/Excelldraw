@@ -9,14 +9,18 @@ type store = {
     startX: number,
     startY: number,
     radius: number,
+} | {
+    shape: 'text',
+    startX: number,
+    startY: number,
+    text: string,
+} | {
+    shape: 'pencil',
+    startX: number,
+    startY: number,
+    clientX: number,
+    clientY: number,
 }
-    | {
-        shape: 'pencil',
-        startX: number,
-        startY: number,
-        clientX: number,
-        clientY: number,
-    }
 
 let store: store[] = [];
 
@@ -39,16 +43,35 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     let startX = 5;
     let startY = 5;
     let text = '';
-    let textX = 5;
-    let textY = 5;
 
     const handleText = (e: KeyboardEvent) => {
         if (selectedTool === 'text') {
-            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight)
-            text = text + e.key
+            ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
+
+            if (store) {
+                store.map((item) => {
+                    if (item.shape === 'rect') {
+                        ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
+                    }
+                    if (item.shape === 'circle') {
+                        ctx!.beginPath();
+                        ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
+                        ctx!.stroke();
+                    }
+                    if (item.shape === 'text') {
+                        ctx.fillStyle = "black";
+                        ctx.fillText(item.text, item.startX, item.startY);
+                        if (item.startX === startX && item.startY === startY) {
+                            text = item.text
+                        }
+                    }
+
+                });
+            }
+
             ctx.font = "16px Arial";
             ctx.fillStyle = "black";
-            ctx.fillText(text, startX, startY);
+            store.push({ shape: 'text', text: text + e.key, startX: startX, startY: startY })
         }
     }
 
@@ -129,6 +152,9 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
         if (selectedTool === 'pencil') {
             ctx.closePath()
             store.push({ shape: 'pencil', startX, startY, clientX: e.clientX, clientY: e.clientY });
+        }
+        if (selectedTool === 'text') {
+            ctx.fillText('|', startX, startY);
         }
 
         if (store) {
