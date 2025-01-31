@@ -33,16 +33,11 @@ function Home() {
                         "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzM3MTEzMjI1fQ.qEyTcUlWgKnDWJITKttrfdZvliE4qGPz1t2FkuXFTmM"
                     }
                 });
-                if (data.admindata) {
-                    const roomName = createNameref.current?.value;
-                    const { name, email } = data.admindata
-                    dispatch(addUserdata({ roomName: roomName, admin: name, email: email }));
-                    if (data.code) {
-                        setLoader(false);
-                        router.push(`/${data.code}`)
-                    }
+                const { code, roomName } = data
+                if (code && roomName) {
+                    setLoader(false);
+                    router.push(`/${data.code}`)
                 }
-                console.log(data.code)
             }
 
         } catch (error) {
