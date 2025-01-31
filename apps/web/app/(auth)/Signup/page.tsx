@@ -58,7 +58,7 @@ function Signup() {
                 </div>
                 <div className="w-full px-24 mt-4">
                     <div onClick={handleSignup} className='w-fit h-fit'>
-                        <Button variant="primary" text="Signup" size="md" />
+                        <Button variant="primary" text="Signup" size="default" />
                     </div>
                 </div>
             </div>

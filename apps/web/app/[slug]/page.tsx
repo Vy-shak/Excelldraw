@@ -6,6 +6,7 @@ import startDraw from '../draw/Index';
 import { Toolbox, Topbar } from '../../components';
 import { useAppSelector } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
+import axios from 'axios';
 
 function page() {
     const selectedTool = useAppSelector((state) => state.tool)
@@ -19,12 +20,10 @@ function page() {
             if (token && slug) {
                 const socket = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
 
-                socket.onopen = () => {
-                    console.log("hello from socket")
+                socket.onopen = (data) => {
+                    console.log(data);
                     if (canvasRef.current) {
                         cleanup = startDraw(canvasRef.current, selectedTool, socket);
-
-
                     }
                     else {
                         console.log("canvasRef is not true")
@@ -42,6 +41,20 @@ function page() {
 
         }
     }, [selectedTool]);
+
+    useEffect(() => {
+        const token = localStorage.getItem('token')
+        async function getUserdata() {
+            if (token) {
+                axios.get("http://localhost:3002/user/getData", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': token
+                    },
+                })
+            }
+        }
+    }, [])
 
 
 

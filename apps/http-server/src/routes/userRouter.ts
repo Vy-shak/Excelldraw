@@ -5,6 +5,7 @@ import bcrypt from "bcrypt"
 import { JWT_SECRET } from "@repo/common/jwtSecret";
 import jwt from "jsonwebtoken"
 import { signinSchema, signupSchema } from "@repo/common2/zod"
+import { deflate } from "zlib";
 
 console.log("env secret is:-", JWT_SECRET);
 
@@ -14,7 +15,7 @@ const userRouter: Router = Router();
 
 userRouter.post('/signup', (req: Request, res: Response) => {
 
-    const { name, email, username, password } = req.body;
+    const { name, email, password } = req.body;
 
     const parsedData = signupSchema.safeParse(req.body);
 
@@ -32,20 +33,19 @@ userRouter.post('/signup', (req: Request, res: Response) => {
             console.log(hashedPass);
             const duplicate = await prisma.user.findFirst({
                 where: {
-                    username: username
+                    email: email
                 }
             });
 
             if (duplicate) {
                 res.status(411).send({
-                    msg: "this username already exist"
+                    msg: "this email already exist"
                 });
                 return
             }
 
             const user = await prisma.user.create({
                 data: {
-                    username: username,
                     email: email,
                     name: name,
                     password: hashedPass
@@ -69,7 +69,7 @@ userRouter.post('/signup', (req: Request, res: Response) => {
 
 userRouter.post('/signin', (req: Request, res: Response) => {
 
-    const { username, email, password } = req.body;
+    const { email, password } = req.body;
 
     const parsedData = signinSchema.safeParse(req.body);
 
@@ -87,7 +87,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
         (async function signinUser() {
             const user = await prisma.user.findFirst({
                 where: {
-                    username
+                    email
                 }
             });
             if (user) {
@@ -121,6 +121,29 @@ userRouter.post('/signin', (req: Request, res: Response) => {
 
 
 });
+
+userRouter.get('getData', async (req: Request, res: Response) => {
+    const id = req.id;
+
+    try {
+        const userData = await prisma.user.findFirst({
+            where: {
+                id: id
+            }
+        });
+        if (userData) {
+            const { name, email } = userData
+            res.status(200).send({
+                data: { name, email }
+            })
+        }
+    } catch (error) {
+        res.status(411).send({
+            err: "can not get the userdata",
+            details: error
+        })
+    }
+})
 
 
 export { userRouter }
