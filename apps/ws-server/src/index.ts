@@ -43,7 +43,7 @@ wss.on('connection', async function connection(socket, req) {
     const roomcode = urlParams.get('roomcode');
 
     if (roomcode) {
-        const roomexist = prisma.rooms.findFirst({
+        const roomexist = await prisma.rooms.findFirst({
             where: {
                 roomCode: roomcode
             }
@@ -54,14 +54,19 @@ wss.on('connection', async function connection(socket, req) {
             wss.close();
             return
         };
+
         const userId = authCheck(token as string);
 
-        if (userId) {
+        if (!userId) {
             socket.send("your profile is not verified please login");
             wss.close();
         }
 
         if (userId && roomcode) {
+            const { roomname, roomCode } = roomexist;
+            const authData = { type: 'join', roomname: roomname, roomCode: roomCode }
+            socket.send(JSON.stringify(authData))
+
             if (typeof roomcode === "string") {
                 if (allSocket.has(roomcode)) {
                     let channel = allSocket.get(roomcode);
