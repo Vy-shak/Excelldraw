@@ -30,8 +30,8 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     if (!ctx) return;
 
     socket.onmessage = function (event) {
+        console.log('event', event)
         const { shape, startX, startY, width, height } = JSON.parse(event.data)
-        console.log(event.data)
         if (shape === 'rect') {
             ctx!.setLineDash([5, 3]);
             ctx!.strokeRect(startX, startY, width, height);

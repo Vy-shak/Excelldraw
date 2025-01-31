@@ -122,7 +122,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
 
 });
 
-userRouter.get('getData', async (req: Request, res: Response) => {
+userRouter.get('/getData', async (req: Request, res: Response) => {
     const id = req.id;
 
     try {

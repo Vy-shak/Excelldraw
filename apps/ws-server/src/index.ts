@@ -65,7 +65,7 @@ wss.on('connection', async function connection(socket, req) {
         if (userId && roomcode) {
             const { roomname, roomCode } = roomexist;
             const authData = { type: 'join', roomname: roomname, roomCode: roomCode }
-            socket.send(JSON.stringify(authData))
+            socket.send(JSON.stringify(authData));
 
             if (typeof roomcode === "string") {
                 if (allSocket.has(roomcode)) {
