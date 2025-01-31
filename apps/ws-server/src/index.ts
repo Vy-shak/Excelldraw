@@ -41,61 +41,65 @@ wss.on('connection', async function connection(socket, req) {
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     const token = urlParams.get('token');
     const roomcode = urlParams.get('roomcode');
-    // socket.send("you are connected to this room")
 
-
-    if (!roomcode) {
-        socket.send("your roomid does not exist");
-        wss.close();
-        return
-    };
-    const userId = authCheck(token as string);
-
-    if (userId && roomcode) {
-        if (typeof roomcode === "string") {
-            const userDetail = prisma.user.findFirst({
-                where: {
-                    id: userId
-                }
-            });
-
-
-            if (allSocket.has(roomcode)) {
-                let channel = allSocket.get(roomcode);
-                channel.push({ socket: socket, userId: userId });
-                allSocket.set(roomcode, channel);
+    if (roomcode) {
+        const roomexist = prisma.rooms.findFirst({
+            where: {
+                roomCode: roomcode
             }
-            else {
-                allSocket.set(roomcode, [{ socket: socket, userId: userId }]);
+        });
+
+        if (!roomexist) {
+            socket.send("your roomid does not exist");
+            wss.close();
+            return
+        };
+        const userId = authCheck(token as string);
+
+        if (userId) {
+            socket.send("your profile is not verified please login");
+            wss.close();
+        }
+
+        if (userId && roomcode) {
+            if (typeof roomcode === "string") {
+                if (allSocket.has(roomcode)) {
+                    let channel = allSocket.get(roomcode);
+                    channel.push({ socket: socket, userId: userId });
+                    allSocket.set(roomcode, channel);
+                }
+                else {
+                    allSocket.set(roomcode, [{ socket: socket, userId: userId }]);
+                }
             }
         }
+
+        socket.on('message', function message(data) {
+            const parsedData: parsedData = JSON.parse(data as unknown as string);
+            console.log(parsedData)
+            let channel = allSocket.get(roomcode);
+
+            if (parsedData) {
+                channel.map((item: channel) => {
+                    if (parsedData.type === 'chat') {
+                        item.socket.send(parsedData.message)
+                    }
+
+                    if (parsedData.type === 'shape') {
+                        const shapeString = JSON.stringify(parsedData.shape)
+                        console.log(shapeString)
+                        item.socket.send(shapeString)
+                    }
+
+                    if (parsedData.type === 'leave') {
+                        channel = channel.filter((item: channel) => {
+                            item.userId !== userId
+                        });
+                    }
+                })
+            }
+        });
     }
 
-
-    socket.on('message', function message(data) {
-        const parsedData: parsedData = JSON.parse(data as unknown as string);
-        console.log(parsedData)
-        let channel = allSocket.get(roomcode);
-
-        if (parsedData) {
-            channel.map((item: channel) => {
-                if (parsedData.type === 'chat') {
-                    item.socket.send(parsedData.message)
-                }
-
-                if (parsedData.type === 'shape') {
-                    const shapeString = JSON.stringify(parsedData.shape)
-                    console.log(shapeString)
-                    item.socket.send(shapeString)
-                }
-
-                if (parsedData.type === 'leave') {
-                    channel = channel.filter((item: channel) => {
-                        item.userId !== userId
-                    });
-                }
-            })
-        }
-    });
 
 })

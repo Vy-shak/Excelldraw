@@ -14,7 +14,7 @@ const userRouter: Router = Router();
 
 userRouter.post('/signup', (req: Request, res: Response) => {
 
-    const { name, email, password } = req.body;
+    const { name, email, username, password } = req.body;
 
     const parsedData = signupSchema.safeParse(req.body);
 
@@ -32,19 +32,20 @@ userRouter.post('/signup', (req: Request, res: Response) => {
             console.log(hashedPass);
             const duplicate = await prisma.user.findFirst({
                 where: {
-                    email: email
+                    username: username
                 }
             });
 
             if (duplicate) {
                 res.status(411).send({
-                    msg: "this mail already exist"
+                    msg: "this username already exist"
                 });
                 return
             }
 
             const user = await prisma.user.create({
                 data: {
+                    username: username,
                     email: email,
                     name: name,
                     password: hashedPass
@@ -68,7 +69,7 @@ userRouter.post('/signup', (req: Request, res: Response) => {
 
 userRouter.post('/signin', (req: Request, res: Response) => {
 
-    const { email, password } = req.body;
+    const { username, email, password } = req.body;
 
     const parsedData = signinSchema.safeParse(req.body);
 
@@ -86,7 +87,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
         (async function signinUser() {
             const user = await prisma.user.findFirst({
                 where: {
-                    email
+                    username
                 }
             });
             if (user) {
