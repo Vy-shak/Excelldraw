@@ -13,11 +13,9 @@ function page() {
     const selectedTool = useAppSelector((state) => state.tool);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const params = useParams<{ slug: string }>();
+    const socketRef = useRef<WebSocket | null>(null)
     const dispatch = useAppDispatch();
-    const [mySocket, setSocket] = useState<WebSocket | null>(null);
     const [socketOn, setOnsocket] = useState(false)
-    console.log(mySocket, 'mysocket');
-
 
     useEffect(() => {
         if (canvasRef.current) {
@@ -26,7 +24,7 @@ function page() {
             if (token && slug) {
                 const ws = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
                 if (ws) {
-                    setSocket(ws);
+                    socketRef.current = ws
                     setOnsocket(true)
                 }
             }
@@ -39,20 +37,21 @@ function page() {
     useEffect(() => {
         let cleanup: (() => void) | undefined = undefined
         console.log("renderig again")
-        console.log('issocket', mySocket)
-        if (mySocket && socketOn) {
+        if (socketRef.current) {
             console.log("hellos")
-            if (canvasRef.current) {
-                cleanup = startDraw(canvasRef.current, selectedTool, mySocket);
-                mySocket.onopen = function () {
-                    mySocket.onmessage = function (event) {
-                        const details = event.data
-                        const { roomname, roomCode } = JSON.parse(details)
-                        if (roomname && roomCode) {
-                            dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
-                        }
-                    }
-                }
+            if (canvasRef.current && socketRef.current) {
+                console.log("heyy")
+                cleanup = startDraw(canvasRef.current, selectedTool, socketRef.current);
+
+                // socketRef.current.onopen = function () {
+                //     socketRef.current!.onmessage = function (event) {
+                //         const details = event.data
+                //         const { roomname, roomCode } = JSON.parse(details)
+                //         if (roomname && roomCode) {
+                //             dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
+                //         }
+                //     }
+                // }
             }
             else {
                 console.log("canvasRef is not true")
@@ -64,7 +63,7 @@ function page() {
                 }
             }
         };
-    }, [selectedTool, socketOn])
+    }, [selectedTool, socketRef.current])
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -90,7 +89,7 @@ function page() {
             backgroundSize: '20px 20px',
         }} className='w-screen flex flex-col justify-center items-center  h-screen overflow-hidden bg-neutral-50'>
             <Topbar />
-            {mySocket && <Chatbox socket={mySocket} />}
+            {socketOn && socketRef.current && <Chatbox socket={socketRef.current} />}
             <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
             {<Toolbox />}
         </div>

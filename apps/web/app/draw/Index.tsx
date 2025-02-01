@@ -25,7 +25,7 @@ type store = {
 let store: store[] = [];
 
 function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket) {
-    console.log("we got socket", socket)
+    console.log("we got socket i shape", socket)
     console.log('currenttoolsss', selectedTool)
     let ctx = canvas.getContext("2d");
     if (!ctx) return;
