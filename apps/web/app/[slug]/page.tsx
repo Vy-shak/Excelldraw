@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
 import startDraw from '../draw/Index';
-import { Toolbox, Topbar } from '../../components';
+import { Toolbox, Topbar, Chatbox } from '../../components';
 import { useAppSelector, useAppDispatch } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
@@ -30,6 +30,7 @@ function page() {
                         socket.onmessage = function (event) {
                             const details = event.data
                             const { roomname, roomCode } = JSON.parse(details)
+
                             if (roomname && roomCode) {
                                 dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
                             }
@@ -75,6 +76,7 @@ function page() {
             backgroundSize: '20px 20px',
         }} className='w-screen flex flex-col justify-center items-center  h-screen overflow-hidden bg-neutral-50'>
             <Topbar />
+            <Chatbox />
             <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
             {<Toolbox />}
         </div>
