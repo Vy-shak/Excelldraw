@@ -30,15 +30,13 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     let ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    socket.onopen = () => {
-        socket.onmessage = function (event) {
-            console.log('eventssss', event)
-            const { shape, startX, startY, width, height } = JSON.parse(event.data)
-            if (shape === 'rect') {
-                ctx!.setLineDash([5, 3]);
-                ctx!.strokeRect(startX, startY, width, height);
-                store.push({ shape: 'rect', startX, startY, width, height })
-            }
+    socket.onmessage = function (event) {
+        console.log('eventssss', event)
+        const { shape, startX, startY, width, height } = JSON.parse(event.data)
+        if (shape === 'rect') {
+            ctx!.setLineDash([5, 3]);
+            ctx!.strokeRect(startX, startY, width, height);
+            store.push({ shape: 'rect', startX, startY, width, height })
         }
     }
 

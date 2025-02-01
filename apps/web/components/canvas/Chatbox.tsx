@@ -54,7 +54,7 @@ function Chatbox({ socket }: chatbox) {
                         <div>
                             <div className='w-full space-y-2 flex flex-col justify-start items-start'>
                                 {chats.map((item, index) => (
-                                    <Messagebox author={"name"} message={item} key={index} />
+                                    <Messagebox author={"user"} message={item} key={index} />
                                 ))}
                             </div>
                         </div>
