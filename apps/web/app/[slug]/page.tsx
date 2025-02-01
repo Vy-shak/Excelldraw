@@ -8,7 +8,6 @@ import { useAppSelector, useAppDispatch } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { addUserdata } from '../../lib/store/user/userdataSlice';
-import { Socket } from 'dgram';
 
 function page() {
     const selectedTool = useAppSelector((state) => state.tool);
@@ -16,7 +15,6 @@ function page() {
     const params = useParams<{ slug: string }>();
     const dispatch = useAppDispatch();
     const [mySocket, setSocket] = useState<WebSocket | null>(null)
-    const [socketReady, setSocketReady] = useState(false)
     console.log(mySocket, 'mysocket');
 
 
@@ -28,7 +26,6 @@ function page() {
                 const ws = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
                 if (ws) {
                     setSocket(ws);
-                    setSocketReady(true)
                 }
             }
             else {
@@ -40,7 +37,7 @@ function page() {
     useEffect(() => {
         let cleanup = null;
         console.log('issocket', mySocket)
-        if (mySocket && socketReady) {
+        if (mySocket) {
             mySocket.onopen = (val) => {
                 console.log("hellos")
                 if (canvasRef.current) {
@@ -59,7 +56,7 @@ function page() {
                 }
             };
         }
-    }, [selectedTool, socketReady])
+    }, [selectedTool, mySocket])
 
     useEffect(() => {
         const token = localStorage.getItem('token');
