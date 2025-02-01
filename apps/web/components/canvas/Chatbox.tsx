@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import Input from '../general/Input'
 import { useRef } from 'react'
 import { Send, ChevronRight, MessageSquare } from "lucide-react"
+import Messagebox from './Messagebox'
 function Chatbox() {
     const MessageRef = useRef<HTMLInputElement>(null)
     const msg = ['kdfkj']
@@ -17,7 +18,7 @@ function Chatbox() {
 
     return (
         <>
-            {!isChat && <div onClick={openChatbox} className='absolute w-fit h-fit right-2 top-1/2 '>
+            {!isChat && <div onClick={openChatbox} className='absolute bg-white px-2 py-1 rounded border-2 w-fit h-fit right-2 top-1/2 '>
                 <MessageSquare color='black' />
             </div>}
             {isChat && <div className='flexCenter h-full absolute right-0'>
@@ -29,9 +30,9 @@ function Chatbox() {
                         <div>
 
                         </div>
-                        <div>
-                            {msg.map((item) => (
-                                <div key={1} className='text-black'>{item}</div>
+                        <div className='w-fullflex flex-col justify-start items-start'>
+                            {msg.map((item, index) => (
+                                <Messagebox key={index} />
                             ))}
                         </div>
                         <div className='flexCenter pr-4 w-fit h-fit'>

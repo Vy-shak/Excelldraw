@@ -18,7 +18,6 @@ function Topbar() {
             <div className='flexCenter w-fit space-x-3'>
                 <Button variant='primary' text='Share space' size='default' />
                 <Button variant='secondary' text='Save' size='default' />
-                <MessageCircle color='black' />
             </div>
         </div>
     )
