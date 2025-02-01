@@ -3,7 +3,11 @@ import Input from '../general/Input'
 import { useRef } from 'react'
 import { Send, ChevronRight, MessageSquare } from "lucide-react"
 import Messagebox from './Messagebox'
-function Chatbox() {
+
+interface chatbox {
+    socket: WebSocket
+}
+function Chatbox({ socket }: chatbox) {
     const MessageRef = useRef<HTMLInputElement>(null)
     const msg = ['kdfkj']
     const [isChat, setIschat] = useState(false);
@@ -28,12 +32,11 @@ function Chatbox() {
                 <div className='h-full pt-12'>
                     <div className='h-full border--2 pl-3 pt-7 pb-4 bg-white flex flex-col justify-between items-start '>
                         <div>
-
-                        </div>
-                        <div className='w-fullflex flex-col justify-start items-start'>
-                            {msg.map((item, index) => (
-                                <Messagebox key={index} />
-                            ))}
+                            <div className='w-full flex flex-col justify-start items-start'>
+                                {msg.map((item, index) => (
+                                    <Messagebox author={"name"} message={"message"} key={index} />
+                                ))}
+                            </div>
                         </div>
                         <div className='flexCenter pr-4 w-fit h-fit'>
                             <Input place='Type a message' type='text' Size='normal' reference={MessageRef} />
