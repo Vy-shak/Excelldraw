@@ -11,55 +11,55 @@ import { addUserdata } from '../../lib/store/user/userdataSlice';
 import { Socket } from 'dgram';
 
 function page() {
-    const selectedTool = useAppSelector((state) => state.tool)
+    const selectedTool = useAppSelector((state) => state.tool);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const params = useParams<{ slug: string }>();
     const dispatch = useAppDispatch();
     const [mySocket, setSocket] = useState<WebSocket | null>(null)
-    console.log(mySocket, 'mysocket')
+    const [socketReady, setSocketReady] = useState(false)
+    console.log(mySocket, 'mysocket');
+
+
     useEffect(() => {
         if (canvasRef.current) {
             const token = localStorage.getItem('token');
             const slug = params.slug
-            let cleanup: any = undefined;
             if (token && slug) {
                 const ws = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
                 if (ws) {
-                    setSocket(ws)
-                }
-                if (mySocket) {
-                    mySocket.onopen = (val) => {
-                        console.log("hellos")
-                        if (canvasRef.current) {
-                            cleanup = startDraw(canvasRef.current, selectedTool, mySocket);
-                            mySocket.onmessage = function (event) {
-                                const details = event.data
-                                const { roomname, roomCode } = JSON.parse(details)
-
-                                if (roomname && roomCode) {
-                                    dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
-                                }
-                            }
-                        }
-                        else {
-                            console.log("canvasRef is not true")
-                        }
-                    };
-                }
-                else {
-                    console.log("socket is not set finished")
+                    setSocket(ws);
+                    setSocketReady(true)
                 }
             }
             else {
                 console.log("token is not valid")
             }
-
-            return () => {
-                if (cleanup) cleanup();
-            };
-
         }
-    }, [selectedTool]);
+    }, []);
+
+    useEffect(() => {
+        let cleanup = null;
+        console.log('issocket', mySocket)
+        if (mySocket && socketReady) {
+            mySocket.onopen = (val) => {
+                console.log("hellos")
+                if (canvasRef.current) {
+                    cleanup = startDraw(canvasRef.current, selectedTool, mySocket);
+                    mySocket.onmessage = function (event) {
+                        const details = event.data
+                        const { roomname, roomCode } = JSON.parse(details)
+
+                        if (roomname && roomCode) {
+                            dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
+                        }
+                    }
+                }
+                else {
+                    console.log("canvasRef is not true")
+                }
+            };
+        }
+    }, [selectedTool, socketReady])
 
     useEffect(() => {
         const token = localStorage.getItem('token');

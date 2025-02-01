@@ -8,9 +8,12 @@ interface chatbox {
     socket: WebSocket
 }
 function Chatbox({ socket }: chatbox) {
-    const MessageRef = useRef<HTMLInputElement>(null)
+    const MessageRef = useRef<HTMLInputElement>(null);
+    console.log('got the socket in chat', socket)
     const msg = ['kdfkj']
     const [isChat, setIschat] = useState(false);
+    const [chats, setChats] = useState([]);
+
 
 
     const openChatbox = () => {
@@ -25,7 +28,7 @@ function Chatbox({ socket }: chatbox) {
             {!isChat && <div onClick={openChatbox} className='absolute bg-white px-2 py-1 rounded border-2 w-fit h-fit right-2 top-1/2 '>
                 <MessageSquare color='black' />
             </div>}
-            {isChat && <div className='flexCenter h-full absolute right-0'>
+            {isChat && <div className='flexCenter z-20 h-full absolute right-0'>
                 <div onClick={closeChatbox} className='w-6 h-10  rounded border-2 flexCenter bg-white'>
                     <ChevronRight color='black' />
                 </div>
