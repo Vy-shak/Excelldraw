@@ -14,7 +14,8 @@ function page() {
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const params = useParams<{ slug: string }>();
     const dispatch = useAppDispatch();
-    const [mySocket, setSocket] = useState<WebSocket | null>(null)
+    const [mySocket, setSocket] = useState<WebSocket | null>(null);
+    const [socketOn, setOnsocket] = useState(false)
     console.log(mySocket, 'mysocket');
 
 
@@ -26,6 +27,7 @@ function page() {
                 const ws = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
                 if (ws) {
                     setSocket(ws);
+                    setOnsocket(true)
                 }
             }
             else {
@@ -35,28 +37,34 @@ function page() {
     }, []);
 
     useEffect(() => {
-        let cleanup = null;
+        let cleanup: (() => void) | undefined = undefined
+        console.log("renderig again")
         console.log('issocket', mySocket)
-        if (mySocket) {
-            mySocket.onopen = (val) => {
-                console.log("hellos")
-                if (canvasRef.current) {
-                    cleanup = startDraw(canvasRef.current, selectedTool, mySocket);
+        if (mySocket && socketOn) {
+            console.log("hellos")
+            if (canvasRef.current) {
+                cleanup = startDraw(canvasRef.current, selectedTool, mySocket);
+                mySocket.onopen = function () {
                     mySocket.onmessage = function (event) {
                         const details = event.data
                         const { roomname, roomCode } = JSON.parse(details)
-
                         if (roomname && roomCode) {
                             dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
                         }
                     }
                 }
-                else {
-                    console.log("canvasRef is not true")
+            }
+            else {
+                console.log("canvasRef is not true")
+            }
+
+            return () => {
+                if (cleanup) {
+                    cleanup()
                 }
-            };
-        }
-    }, [selectedTool, mySocket])
+            }
+        };
+    }, [selectedTool, socketOn])
 
     useEffect(() => {
         const token = localStorage.getItem('token');

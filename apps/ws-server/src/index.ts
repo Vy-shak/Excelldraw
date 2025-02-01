@@ -87,7 +87,8 @@ wss.on('connection', async function connection(socket, req) {
             if (parsedData) {
                 channel.map((item: channel) => {
                     if (parsedData.type === 'chat') {
-                        item.socket.send(parsedData.message)
+                        const shapeString = JSON.stringify(parsedData)
+                        item.socket.send(shapeString)
                     }
 
                     if (parsedData.type === 'shape') {
