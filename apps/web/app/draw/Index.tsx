@@ -24,8 +24,29 @@ type store = {
 
 let store: store[] = [];
 
+function renderAll(ctx: CanvasRenderingContext2D) {
+    store.map((item) => {
+        if (item.shape === 'rect') {
+            ctx!.strokeStyle = 'black';
+            ctx!.setLineDash([5, 3]);
+            ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
+        }
+        if (item.shape === 'circle') {
+            ctx!.strokeStyle = 'black';
+            ctx!.beginPath();
+            ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
+            ctx!.stroke();
+        }
+        if (item.shape === 'text') {
+            ctx!.font = "16px Arial";
+            ctx!.fillStyle = "black";
+            ctx!.fillText(item.text, item.startX, item.startY);
+        }
+    })
+}
+
 function Socketmsg(canvas: HTMLCanvasElement, shapes: any) {
-    const { shape, startX, startY, width, height } = shapes
+    const { shape, startX, startY, width, height, radius, text } = shapes
     console.log("we are working", shapes)
     let ctx = canvas.getContext("2d");
     if (shape === 'rect') {
@@ -33,6 +54,19 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: any) {
         ctx!.setLineDash([5, 3]);
         ctx!.strokeRect(startX, startY, width, height);
         store.push({ shape: 'rect', startX, startY, width, height })
+    }
+    if (shape === 'circle') {
+        ctx!.strokeStyle = 'black';
+        ctx!.beginPath();
+        ctx!.arc(startX, startY, radius, 0, 6.283);
+        ctx!.stroke();
+        store.push({ shape: 'circle', startX, startY, radius })
+    }
+    if (shape === 'text') {
+        ctx!.font = "16px Arial";
+        ctx!.fillStyle = "black";
+        ctx!.fillText(text, startX, startY);
+        store.push({ shape: 'text', text, startX, startY })
     }
 }
 
@@ -50,31 +84,22 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     const handleText = (e: KeyboardEvent) => {
         if (selectedTool === 'text') {
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
-            if (store) {
-                store.map((item) => {
-                    if (item.shape === 'rect') {
-                        ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
-                    }
-                    if (item.shape === 'circle') {
-                        ctx!.beginPath();
-                        ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
-                        ctx!.stroke();
-                    }
-                    if (item.shape === 'text') {
-                        ctx.fillStyle = "black";
-                        ctx.fillText(item.text, item.startX, item.startY);
-                        if (item.startX === startX && item.startY === startY) {
-                            text = item.text
-                        }
-                    }
-
-                });
-            }
-
+            renderAll(ctx)
             ctx.font = "16px Arial";
             ctx.fillStyle = "black";
-            store.push({ shape: 'text', text: text + e.key, startX: startX, startY: startY })
+            if (e.key === 'Backspace') {
+                text = text.slice(0, -1);
+                ctx.fillText(text + '|', startX, startY);
+            }
+            if (/^[a-zA-Z0-9]$/.test(e.key)) {
+                text = text + e.key
+                ctx.fillText(text + '|', startX, startY);
+            }
+            else {
+                ctx.fillText(text + '|', startX, startY);
+            }
+            const details = { shape: 'text', text: text, startX, startY }
+            socket.send(JSON.stringify(details))
         }
     }
 
@@ -142,14 +167,15 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
         ctx!.strokeStyle = 'black';
 
         if (selectedTool === 'rect') {
-            console.log("sending to socket")
-            store.push({ shape: 'rect', startX, startY, width, height });
+            // store.push({ shape: 'rect', startX, startY, width, height });
             const shapeData = { type: 'shape', shape: { shape: 'rect', startX, startY, width, height } }
             socket.send(JSON.stringify(shapeData));
         }
 
         if (selectedTool === 'circle') {
-            store.push({ shape: 'circle', startX, startY, radius });
+            // store.push({ shape: 'circle', startX, startY, radius });
+            const shapeData = { type: 'shape', shape: { shape: 'circle', startX, startY, radius } }
+            socket.send(JSON.stringify(shapeData));
         }
 
         if (selectedTool === 'pencil') {
