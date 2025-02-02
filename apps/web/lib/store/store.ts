@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import toolreducer from "./draw/toolSlice"
 import userReducer from "./user/userdataSlice"
+import messageReducer from "./chat/messageSlice"
 
 export const makeStore = () => {
     return configureStore({
         reducer: {
             tool: toolreducer,
-            userData: userReducer
+            userData: userReducer,
+            message: messageReducer
         },
     })
 }

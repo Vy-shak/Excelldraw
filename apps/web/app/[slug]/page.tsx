@@ -9,6 +9,7 @@ import { useAppSelector, useAppDispatch } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import { addUserdata } from '../../lib/store/user/userdataSlice';
+import { addMessages } from '../../lib/store/chat/messageSlice';
 
 function page() {
     const selectedTool = useAppSelector((state) => state.tool);
@@ -50,6 +51,9 @@ function page() {
                     const parsedData = JSON.parse(details);
                     if (parsedData.shape) {
                         Socketmsg(canvasRef.current!, parsedData)
+                    }
+                    if (parsedData.type === 'chat') {
+                        dispatch(addMessages(parsedData.message))
                     }
                     const { roomname, roomCode } = JSON.parse(details)
                     if (roomname && roomCode) {

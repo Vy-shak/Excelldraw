@@ -3,16 +3,17 @@ import Input from '../general/Input'
 import { useRef } from 'react'
 import { Send, ChevronRight, MessageSquare } from "lucide-react"
 import Messagebox from './Messagebox'
+import { useAppSelector } from '../../lib/store/hook'
 
 interface chatbox {
     socket: WebSocket
 }
 function Chatbox({ socket }: chatbox) {
+    const chats = useAppSelector((state) => state.message)
     const MessageRef = useRef<HTMLInputElement>(null);
     console.log('got the socket in chat', socket)
     const msg = ['kdfkj']
     const [isChat, setIschat] = useState(false);
-    const [chats, setChats] = useState<string[]>([]);
 
 
 
@@ -23,13 +24,6 @@ function Chatbox({ socket }: chatbox) {
         setIschat(false)
     }
 
-    socket.onmessage = function (event) {
-        const chat = event.data;
-        const parsedChat = JSON.parse(chat);
-        if (parsedChat.type === 'chat') {
-            setChats((prev) => [...prev, parsedChat.message])
-        }
-    }
 
     const sendMessage = () => {
         console.log('clicked chat')
