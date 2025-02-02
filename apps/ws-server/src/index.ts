@@ -93,7 +93,6 @@ wss.on('connection', async function connection(socket, req) {
 
                     if (parsedData.type === 'shape') {
                         const shapeString = JSON.stringify(parsedData.shape)
-                        console.log(shapeString)
                         item.socket.send(shapeString)
                     }
 

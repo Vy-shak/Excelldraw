@@ -98,7 +98,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             else {
                 ctx.fillText(text + '|', startX, startY);
             }
-            const details = { shape: 'text', text: text, startX, startY }
+            const details = { type: 'shape', shape: { shape: 'text', text: text, startX, startY } }
             socket.send(JSON.stringify(details))
         }
     }
