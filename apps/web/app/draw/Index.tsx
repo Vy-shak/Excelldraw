@@ -46,28 +46,28 @@ function renderAll(ctx: CanvasRenderingContext2D) {
 }
 
 function Socketmsg(canvas: HTMLCanvasElement, shapes: any) {
-    const { shape, startX, startY, width, height, radius, text } = shapes
+
     console.log("we are working", shapes)
     let ctx = canvas.getContext("2d");
-    if (shape === 'rect') {
-        ctx!.strokeStyle = 'black';
-        ctx!.setLineDash([5, 3]);
-        ctx!.strokeRect(startX, startY, width, height);
-        store.push({ shape: 'rect', startX, startY, width, height })
-    }
-    if (shape === 'circle') {
-        ctx!.strokeStyle = 'black';
-        ctx!.beginPath();
-        ctx!.arc(startX, startY, radius, 0, 6.283);
-        ctx!.stroke();
-        store.push({ shape: 'circle', startX, startY, radius })
-    }
-    if (shape === 'text') {
-        ctx!.font = "16px Arial";
-        ctx!.fillStyle = "black";
-        ctx!.fillText(text, startX, startY);
-        store.push({ shape: 'text', text, startX, startY })
-    }
+    shapes.map((item) => {
+        const { shape, startX, startY, width, height, radius, text } = item
+        if (shape === 'rect') {
+            ctx!.strokeStyle = 'black';
+            ctx!.setLineDash([5, 3]);
+            ctx!.strokeRect(startX, startY, width, height);
+        }
+        if (shape === 'circle') {
+            ctx!.strokeStyle = 'black';
+            ctx!.beginPath();
+            ctx!.arc(startX, startY, radius, 0, 6.283);
+            ctx!.stroke();
+        }
+        if (shape === 'text') {
+            ctx!.font = "16px Arial";
+            ctx!.fillStyle = "black";
+            ctx!.fillText(text, startX, startY);
+        }
+    })
 }
 
 function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket,) {

@@ -5,6 +5,7 @@ import { prisma } from "@repo/db/client"
 const wss = new WebSocketServer({ port: 8080 });
 
 let allSocket = new Map();
+let allDrawings = [];
 
 interface channel {
     socket: WebSocket,
@@ -78,7 +79,6 @@ wss.on('connection', async function connection(socket, req) {
                 }
             }
         }
-
         socket.on('message', function message(data) {
             const parsedData: parsedData = JSON.parse(data as unknown as string);
             console.log(parsedData)
@@ -93,7 +93,8 @@ wss.on('connection', async function connection(socket, req) {
 
                     if (parsedData.type === 'shape') {
                         const shapeString = JSON.stringify(parsedData.shape)
-                        item.socket.send(shapeString)
+                        allDrawings.push(shapeString);
+                        item.socket.send(allDrawings)
                     }
 
                     if (parsedData.type === 'leave') {
