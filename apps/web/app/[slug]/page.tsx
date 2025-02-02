@@ -3,6 +3,7 @@
 import React, { useState } from 'react'
 import { useRef, useEffect } from 'react'
 import startDraw from '../draw/Index';
+import { Socketmsg } from '../draw/Index';
 import { Toolbox, Topbar, Chatbox } from '../../components';
 import { useAppSelector, useAppDispatch } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
@@ -43,15 +44,18 @@ function page() {
                 console.log("heyy")
                 cleanup = startDraw(canvasRef.current, selectedTool, socketRef.current);
 
-                // socketRef.current.onopen = function () {
-                //     socketRef.current!.onmessage = function (event) {
-                //         const details = event.data
-                //         const { roomname, roomCode } = JSON.parse(details)
-                //         if (roomname && roomCode) {
-                //             dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
-                //         }
-                //     }
-                // }
+                socketRef.current!.onmessage = function (event) {
+                    console.log("messgae comming here", event.data)
+                    const details = event.data
+                    const parsedData = JSON.parse(details);
+                    if (parsedData.shape) {
+                        Socketmsg(canvasRef.current!, parsedData)
+                    }
+                    const { roomname, roomCode } = JSON.parse(details)
+                    if (roomname && roomCode) {
+                        dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
+                    }
+                }
             }
             else {
                 console.log("canvasRef is not true")

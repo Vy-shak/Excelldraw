@@ -24,21 +24,23 @@ type store = {
 
 let store: store[] = [];
 
-function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket) {
+function Socketmsg(canvas: HTMLCanvasElement, shapes: any) {
+    const { shape, startX, startY, width, height } = shapes
+    console.log("we are working", shapes)
+    let ctx = canvas.getContext("2d");
+    if (shape === 'rect') {
+        ctx!.strokeStyle = 'black';
+        ctx!.setLineDash([5, 3]);
+        ctx!.strokeRect(startX, startY, width, height);
+        store.push({ shape: 'rect', startX, startY, width, height })
+    }
+}
+
+function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket,) {
     console.log("we got socket i shape", socket)
     console.log('currenttoolsss', selectedTool)
     let ctx = canvas.getContext("2d");
     if (!ctx) return;
-
-    socket.onmessage = function (event) {
-        console.log('eventssss', event)
-        const { shape, startX, startY, width, height } = JSON.parse(event.data)
-        if (shape === 'rect') {
-            ctx!.setLineDash([5, 3]);
-            ctx!.strokeRect(startX, startY, width, height);
-            store.push({ shape: 'rect', startX, startY, width, height })
-        }
-    }
 
     let clicked = false;
     let startX = 5;
@@ -195,3 +197,4 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
 }
 
 export default startDraw;
+export { Socketmsg }

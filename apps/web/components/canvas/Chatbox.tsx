@@ -23,13 +23,13 @@ function Chatbox({ socket }: chatbox) {
         setIschat(false)
     }
 
-    // socket.onmessage = function (event) {
-    //     const chat = event.data;
-    //     const parsedChat = JSON.parse(chat);
-    //     if (parsedChat.type === 'chat') {
-    //         setChats((prev) => [...prev, parsedChat.message])
-    //     }
-    // }
+    socket.onmessage = function (event) {
+        const chat = event.data;
+        const parsedChat = JSON.parse(chat);
+        if (parsedChat.type === 'chat') {
+            setChats((prev) => [...prev, parsedChat.message])
+        }
+    }
 
     const sendMessage = () => {
         console.log('clicked chat')
