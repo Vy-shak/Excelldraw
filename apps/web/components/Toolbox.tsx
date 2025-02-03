@@ -1,7 +1,7 @@
 "use client"
 
 import React, { Dispatch, SetStateAction } from 'react'
-import { Type, Pencil, MoveUpLeft, Square, Circle, Slash } from 'lucide-react';
+import { Type, Pencil, MoveUpLeft, Square, Circle, Slash, Eraser } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../lib/store/hook';
 import { toolSwitch } from '../lib/store/draw/toolSlice';
 
@@ -20,7 +20,7 @@ function Toolbox() {
             <Circle onClick={() => handleSelection('circle')} size={34} color={selectedTool === 'circle' ? '#34eb4c' : '#7E8183'} />
             <Type size={34} onClick={() => handleSelection('text')} color={selectedTool === 'text' ? '#34eb4c' : '#7E8183'} />
             <Pencil size={34} onClick={() => handleSelection('pencil')} color={selectedTool === 'pencil' ? '#34eb4c' : '#7E8183'} />
-            <Slash size={34} onClick={() => handleSelection('line')} color={selectedTool === 'line' ? '#34eb4c' : '#7E8183'} />
+            <Eraser size={34} onClick={() => handleSelection('line')} color={selectedTool === 'line' ? '#34eb4c' : '#7E8183'} />
             <MoveUpLeft onClick={() => handleSelection('arrow')} size={34} color={selectedTool === 'arrow' ? '#34eb4c' : '#7E8183'} />
         </div>
     )

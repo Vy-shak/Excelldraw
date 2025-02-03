@@ -102,8 +102,10 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             else {
                 ctx.fillText(text + '|', startX, startY);
             }
-            const details = { type: 'shape', shape: { shape: 'text', text: text, startX, startY } }
-            socket.send(JSON.stringify(details))
+            if (e.key === 'Enter') {
+                const details = { type: 'shape', shape: { shape: 'text', text: text, startX, startY } }
+                socket.send(JSON.stringify(details));
+            }
         }
     }
 
@@ -111,12 +113,12 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
         clicked = true;
         startX = e.clientX;
         startY = e.clientY;
-        if (text) {
-            text = '';
-        }
         if (selectedTool === 'pencil') {
             ctx.beginPath();
             ctx.moveTo(startX, startY);
+        }
+        if (text) {
+            text = '';
         }
         ctx!.strokeStyle = 'black';
     };
