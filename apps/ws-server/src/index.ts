@@ -4,9 +4,6 @@ import { prisma } from "@repo/db/client"
 
 const wss = new WebSocketServer({ port: 8080 });
 
-let allSocket = new Map();
-let allDrawings = [];
-let allchats = [];
 
 interface channel {
     socket: WebSocket,
@@ -24,19 +21,17 @@ type shape = {
     startX: number,
     startY: number,
     radius: number,
-} | {
-    shape: 'pencil',
-    startX: number,
-    startY: number,
-    clientX: number,
-    clientY: number,
 }
+
 
 type parsedData = {
     type: 'chat',
     message: string,
-} | { type: 'shape', shape: shape } | { type: 'join' } | { type: 'leave' }
+} | { type: 'shape', shape: shape } | { type: 'join' } | { type: 'leave' } | { type: 'clearAll' }
 
+let allSocket = new Map();
+let allDrawings: shape[] = [];
+let allchats = [];
 
 wss.on('connection', async function connection(socket, req) {
     socket.on('error', console.error);
@@ -96,6 +91,11 @@ wss.on('connection', async function connection(socket, req) {
 
                     if (parsedData.type === 'shape') {
                         allDrawings.push(parsedData.shape);
+                        item.socket.send(JSON.stringify(allDrawings))
+                    }
+                    if (parsedData.type === 'clearAll') {
+                        console.log("hello")
+                        allDrawings = [];
                         item.socket.send(JSON.stringify(allDrawings))
                     }
 

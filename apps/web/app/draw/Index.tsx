@@ -23,6 +23,7 @@ type storeT = {
 }
 
 let globalshapes: any[] = [];
+let globalPencil: any[] = [];
 
 function renderAll(ctx: CanvasRenderingContext2D) {
     if (globalshapes) {
@@ -42,6 +43,15 @@ function renderAll(ctx: CanvasRenderingContext2D) {
                 ctx!.font = "16px Arial";
                 ctx!.fillStyle = "black";
                 ctx!.fillText(item.text, item.startX, item.startY);
+            }
+        })
+    }
+}
+function renderpencil(ctx: CanvasRenderingContext2D) {
+    if (globalPencil) {
+        globalPencil.map((item) => {
+            if (item.shape === 'pencil') {
+                ctx.fillRect(item.startX, item.startY, 5, 5)
             }
         })
     }
@@ -120,6 +130,10 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
         if (text) {
             text = '';
         }
+        if (selectedTool === 'clearAll') {
+            const clearAll = { type: 'clearAll' }
+            socket.send(JSON.stringify(clearAll))
+        }
         ctx!.strokeStyle = 'black';
     };
 
@@ -133,6 +147,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
             renderAll(ctx)
+            renderpencil(ctx)
 
             if (selectedTool === 'rect') {
                 ctx!.strokeRect(startX, startY, width, height);
@@ -142,6 +157,14 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
                 let radius = Math.abs(Math.max(width, height));
                 ctx!.arc(startX, startY, radius, 0, Math.PI * 2);
                 ctx!.stroke();
+            }
+            if (selectedTool === 'pencil') {
+                ctx!.fillRect(e.clientX, e.clientY, 5, 5);
+                globalPencil.push({ shape: 'pencil', startX: e.clientX, startY: e.clientY, width: 5, height: 5 })
+            }
+            else if (selectedTool === 'eraser') {
+                ctx!.fillStyle = 'black';
+                ctx!.fillRect(startX, startY, 50, 50);
             }
         }
     };
