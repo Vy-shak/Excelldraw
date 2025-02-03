@@ -2,7 +2,6 @@ import React from 'react'
 import Image from 'next/image'
 import { Avatar1 } from '../../../public/Dp'
 import { Avatarbox } from '../../../components'
-import { avatarData } from '../../../components/userProfile/Avatarbox'
 
 const page = () => {
     return (
@@ -11,14 +10,7 @@ const page = () => {
                 <Image alt='avatar1' src={Avatar1} />
             </div>
             <div className='w-full flex flex-col justify-start items-start h-full bg-white'>
-                {avatarData.map((item, index) => (
-                    <div key={index}>
-                        <Image
-                            src={item.avatarImg}
-                            alt={`Avatar1`}
-                        />
-                    </div>
-                ))}
+                <Avatarbox />
             </div>
         </section>
     )
