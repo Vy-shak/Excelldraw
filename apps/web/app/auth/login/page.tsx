@@ -2,9 +2,11 @@
 import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input, Button } from '../../../components';
+import Image from 'next/image';
+import { Sideimg1, Sideimg2, Sideimg3, Sideimg4, Star, Planet } from '../../../public';
 import axios from 'axios';
 
-function Signup() {
+function Signin() {
     const [isSignup, setSignup] = useState(false);
 
     const router = useRouter()
@@ -37,8 +39,8 @@ function Signup() {
     }
 
     return (
-        <div className='w-full pt-5 px-20'>
-            <div className="flex w-full px-8 flex-col space-y-4  h-fit rounded-lg bg-white py-4">
+        <div className='w-screen flex justify-between items-center pt-5 px-20'>
+            <div className="flex w-1/2 px-8 flex-col space-y-4  h-fit rounded-lg bg-white py-4">
                 <div className="w-full">
                     <h5 className="text-lg text-neutral-800 font-bold">
                         <span>Get Started with ChalkSync</span><br />
@@ -55,8 +57,16 @@ function Signup() {
                     </div>
                 </div>
             </div>
+            <div className='w-1/2 px-5 flexCenter flex-col'>
+                <div className='w-full space-x-2  flex justify-between'>
+                    <Image className='w-full ' alt='sideimage' src={Sideimg4} />
+                </div>
+                <div className='w-full'>
+                    <Image className='' alt='sideimage' src={Sideimg3} />
+                </div>
+            </div>
         </div>
     )
 }
 
-export default Signup;
+export default Signin;
