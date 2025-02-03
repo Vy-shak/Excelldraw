@@ -5,7 +5,7 @@ import Image from 'next/image'
 import { Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7, Avatar8, Avatar9, Avatar10, Avatar11, Avatar12, Avatar13, Avatar14 } from '../../public/Dp/index';
 
 
-export const avatarData = [
+const avatarData = [
     { avatarImg: Avatar1 },
     { avatarImg: Avatar2 },
     { avatarImg: Avatar3 },
