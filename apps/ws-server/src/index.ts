@@ -6,6 +6,7 @@ const wss = new WebSocketServer({ port: 8080 });
 
 let allSocket = new Map();
 let allDrawings = [];
+let allchats = [];
 
 interface channel {
     socket: WebSocket,
@@ -36,6 +37,7 @@ type parsedData = {
     message: string,
 } | { type: 'shape', shape: shape } | { type: 'join' } | { type: 'leave' }
 
+
 wss.on('connection', async function connection(socket, req) {
     socket.on('error', console.error);
     if (!req.url) return
@@ -65,7 +67,7 @@ wss.on('connection', async function connection(socket, req) {
 
         if (userId && roomcode) {
             const { roomname, roomCode } = roomexist;
-            const authData = { type: 'join', roomname: roomname, roomCode: roomCode }
+            const authData = [{ type: 'join', roomname: roomname, roomCode: roomCode }]
             socket.send(JSON.stringify(authData));
 
             if (typeof roomcode === "string") {
@@ -87,14 +89,14 @@ wss.on('connection', async function connection(socket, req) {
             if (parsedData) {
                 channel.map((item: channel) => {
                     if (parsedData.type === 'chat') {
-                        const shapeString = JSON.stringify(parsedData)
-                        item.socket.send(shapeString)
+                        allchats.push(parsedData)
+                        const allChatstring = JSON.stringify(allchats)
+                        item.socket.send(allChatstring)
                     }
 
                     if (parsedData.type === 'shape') {
-                        const shapeString = JSON.stringify(parsedData.shape)
-                        allDrawings.push(shapeString);
-                        item.socket.send(allDrawings)
+                        allDrawings.push(parsedData.shape);
+                        item.socket.send(JSON.stringify(allDrawings))
                     }
 
                     if (parsedData.type === 'leave') {

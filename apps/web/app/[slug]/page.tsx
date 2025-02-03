@@ -46,16 +46,16 @@ function page() {
                 cleanup = startDraw(canvasRef.current, selectedTool, socketRef.current);
 
                 socketRef.current!.onmessage = function (event) {
-                    console.log("messgae comming here", event.data)
-                    const details = event.data
-                    const parsedData = JSON.parse(details);
-                    if (parsedData.shape) {
+                    const parsedData = JSON.parse(event.data);
+                    console.log(parsedData)
+                    if (parsedData) {
                         Socketmsg(canvasRef.current!, parsedData)
                     }
                     if (parsedData.type === 'chat') {
                         dispatch(addMessages(parsedData.message))
                     }
-                    const { roomname, roomCode } = JSON.parse(details)
+                    const details = parsedData
+                    const { roomname, roomCode } = details[0]
                     if (roomname && roomCode) {
                         dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
                     }

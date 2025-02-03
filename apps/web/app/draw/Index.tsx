@@ -1,4 +1,4 @@
-type store = {
+type storeT = {
     shape: 'rect',
     startX: number,
     startY: number,
@@ -22,33 +22,37 @@ type store = {
     clientY: number,
 }
 
-let store: store[] = [];
+let globalshapes: any[] = [];
 
 function renderAll(ctx: CanvasRenderingContext2D) {
-    store.map((item) => {
-        if (item.shape === 'rect') {
-            ctx!.strokeStyle = 'black';
-            ctx!.setLineDash([5, 3]);
-            ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
-        }
-        if (item.shape === 'circle') {
-            ctx!.strokeStyle = 'black';
-            ctx!.beginPath();
-            ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
-            ctx!.stroke();
-        }
-        if (item.shape === 'text') {
-            ctx!.font = "16px Arial";
-            ctx!.fillStyle = "black";
-            ctx!.fillText(item.text, item.startX, item.startY);
-        }
-    })
+    if (globalshapes) {
+        globalshapes.map((item) => {
+            if (item.shape === 'rect') {
+                ctx!.strokeStyle = 'black';
+                ctx!.setLineDash([5, 3]);
+                ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
+            }
+            if (item.shape === 'circle') {
+                ctx!.strokeStyle = 'black';
+                ctx!.beginPath();
+                ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
+                ctx!.stroke();
+            }
+            if (item.shape === 'text') {
+                ctx!.font = "16px Arial";
+                ctx!.fillStyle = "black";
+                ctx!.fillText(item.text, item.startX, item.startY);
+            }
+        })
+    }
 }
 
-function Socketmsg(canvas: HTMLCanvasElement, shapes: any) {
+function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
 
     console.log("we are working", shapes)
     let ctx = canvas.getContext("2d");
+    console.log("allshapes", shapes)
+    globalshapes = shapes;
     shapes.map((item) => {
         const { shape, startX, startY, width, height, radius, text } = item
         if (shape === 'rect') {
@@ -126,19 +130,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             ctx!.lineJoin = 'round';
             ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-            if (store) {
-                store.map((item) => {
-                    if (item.shape === 'rect') {
-                        ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
-                    }
-                    if (item.shape === 'circle') {
-                        ctx!.beginPath();
-                        ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
-                        ctx!.stroke();
-                    }
-
-                });
-            }
+            renderAll(ctx)
 
             if (selectedTool === 'rect') {
                 ctx!.strokeRect(startX, startY, width, height);
@@ -148,13 +140,6 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
                 let radius = Math.abs(Math.max(width, height));
                 ctx!.arc(startX, startY, radius, 0, Math.PI * 2);
                 ctx!.stroke();
-            }
-            else if (selectedTool === 'pencil') {
-                ctx.lineTo(e.clientX, e.clientY);
-                ctx.stroke();
-                console.log(startX, startY, e.clientX, e.clientY)
-                store.push({ shape: 'pencil', startX: startX, startY: startY, clientX: e.clientX, clientY: e.clientY })
-                console.log('store', store)
             }
         }
     };
@@ -178,32 +163,8 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             socket.send(JSON.stringify(shapeData));
         }
 
-        if (selectedTool === 'pencil') {
-            ctx.closePath()
-            store.push({ shape: 'pencil', startX, startY, clientX: e.clientX, clientY: e.clientY });
-        }
         if (selectedTool === 'text') {
             ctx.fillText('|', startX, startY);
-        }
-
-        if (store) {
-            store.map((item) => {
-                if (item.shape === 'rect') {
-                    ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
-
-                }
-                if (item.shape === 'circle') {
-                    ctx!.beginPath();
-                    ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
-                    ctx!.stroke();
-                }
-                if (item.shape === 'pencil') {
-                    console.log('hello')
-                    ctx!.beginPath();
-                    ctx.lineTo(item.clientX, item.clientY)
-                    ctx.stroke();
-                }
-            });
         }
     };
 
