@@ -3,6 +3,7 @@
 import { Eye, EyeOff, Info } from "lucide-react"
 import { useState } from "react";
 interface inputType {
+    varient: 'bio' | 'normal'
     title?: string,
     type: "text" | "password"
     Size: "medium" | "normal",
@@ -20,6 +21,9 @@ const Constants = {
         text: "text",
         password: "password"
 
+    },
+    varient: {
+        bio: 'bio'
     }
 }
 
