@@ -34,7 +34,7 @@ function Signup() {
             });
 
             if (signupData.data.msg === 'signup done') {
-                router.push('/login')
+                router.push('/auth/dp')
             }
         } catch (error) {
             console.error(error);
@@ -51,10 +51,10 @@ function Signup() {
                     </h5>
                 </div>
                 <div className="flex justify-center space-y-3 flex-col items-center">
-                    <Input place='eg: yshak' Size='normal' reference={nameRef} type='text' title='Name' />
-                    <Input place='eg: Vyshakn29@gmail.com' Size='normal' reference={emailRef} type='text' title='Email' />
-                    <Input place='eg: 12345@gmail.com' Size='normal' reference={passwordRef} type='password' title='Password' />
-                    <Input place='eg: 12345@gmail.com' Size='normal' reference={confirmpassRef} type='password' title='Confirm password' />
+                    <Input varient='normal' place='eg: yshak' Size='normal' reference={nameRef} type='text' title='Name' />
+                    <Input varient='normal' place='eg: Vyshakn29@gmail.com' Size='normal' reference={emailRef} type='text' title='Email' />
+                    <Input varient='normal' place='eg: 12345@gmail.com' Size='normal' reference={passwordRef} type='password' title='Password' />
+                    <Input varient='normal' place='eg: 12345@gmail.com' Size='normal' reference={confirmpassRef} type='password' title='Confirm password' />
                 </div>
                 <div className="w-full px-24 mt-4">
                     <div onClick={handleSignup} className='w-fit h-fit'>

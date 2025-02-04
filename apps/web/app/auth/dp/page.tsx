@@ -1,8 +1,9 @@
 "use client"
-import React, { useState } from 'react'
+import React, { useState, useRef, } from 'react'
 import Image, { StaticImageData } from 'next/image'
 import { Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7, Avatar8, Avatar9, Avatar10, Avatar11, Avatar12, Avatar13, Avatar14 } from '../../../public/Dp/index';
 import { Input } from '../../../components';
+import Link from 'next/link';
 
 
 const avatarData = [
@@ -28,12 +29,13 @@ type Profile = {
 
 const page = () => {
     const [Profile, setProfile] = useState<Profile>({ id: 1, avatarImg: Avatar2 },)
+    const bioRef = useRef<HTMLInputElement>(null)
     return (
         <section className='w-screen flex justify-start pt-16 items-start h-screen bg-white'>
             <div className='w-52 h-screen border-r flex justify-center items-start border-neutral-300'>
                 {Profile && <Image key={Profile.id} className='w-36' alt='avatar1' src={Profile.avatarImg} />}
             </div>
-            <div className='w-full flex flex-col pl-6 justify-start items-start h-full bg-white'>
+            <div className='w-full flex flex-col pl-6 justify-start items-start h-full space-y-2 bg-white'>
                 <div className='flex flex-col space-y-3 justify-start items-start'>
                     <span className='text-xs font-semibold text-neutral-700'>Avatars</span>
                     <div className='flex flex-wrap max-w-lg justify-start gap-2 items-center w-full'>
@@ -42,11 +44,14 @@ const page = () => {
                         ))}
                     </div>
                 </div>
-                <div className='flex flex-col space-y-3 justify-start items-start'>
-                    <span className='text-xs font-semibold text-neutral-700'>bio</span>
-
+                <div className='flex w-full max-w-lg  flex-col space-y-4 justify-start items-start'>
+                    <span className='text-xs font-semibold text-neutral-700'>Bio</span>
+                    {bioRef && <Input reference={bioRef} varient='bio' Size='bio' type='text' />}
                 </div>
             </div>
+            <Link href={'/dashboard'}>
+                <span className='text-xs absolute right-10 bottom-10 font-semibold text-neutral-700'>Skip</span>
+            </Link>
         </section>
     )
 }

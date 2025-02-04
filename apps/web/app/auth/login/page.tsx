@@ -48,8 +48,8 @@ function Signin() {
                     </h5>
                 </div>
                 <div className="flex justify-center space-y-3 flex-col items-center">
-                    <Input Size='normal' place='eg: yshak' reference={emailRef} type='text' title='Email' />
-                    <Input Size='normal' place='eg: yshak@1234*' reference={passwordRef} type='password' title='password' />
+                    <Input varient='normal' Size='normal' place='eg: yshak' reference={emailRef} type='text' title='Email' />
+                    <Input varient='normal' Size='normal' place='eg: yshak@1234*' reference={passwordRef} type='password' title='password' />
                 </div>
                 <div className="w-full px-24 mt-4">
                     <div onClick={handlelogin} className='w-fit h-fit'>
