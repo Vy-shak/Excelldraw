@@ -1,8 +1,7 @@
 "use client"
 
 import React, { useState, useRef, } from 'react'
-import Image, { StaticImageData } from 'next/image'
-import { Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7, Avatar8, Avatar9, Avatar10, Avatar11, Avatar12, Avatar13, Avatar14 } from '../../../public/Dp/index';
+import Image from 'next/image';
 import { Button, Input } from '../../../components';
 import Link from 'next/link';
 import { supabase, avatarsPublicurl } from '../../../lib/superBase/superbaseClient';
@@ -32,7 +31,7 @@ type Profile = {
 
 
 const page = () => {
-    const [Profile, setProfile] = useState<Profile>({ id: 'Avatar2.svg', avatarImg: Avatar2, url: "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/Avatar2.svg" })
+    const [Profile, setProfile] = useState<Profile>({ id: 'Avatar2.svg', url: "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/Avatar2.svg" })
     const [customUrl, setCustomurl] = useState('')
     const bioRef = useRef<HTMLInputElement>(null)
     const uploadImgref = useRef<HTMLInputElement>(null)
@@ -55,22 +54,23 @@ const page = () => {
             return
         }
         const randomId = Math.random()
-        const filename = `${randomId}customProfile`
-        const upload = await supabase.storage.from('Profilepic').upload(filename, file);
+        const profileName = `${randomId}customProfile`
+        const upload = await supabase.storage.from('Profilepic').upload(profileName, file);
         const { error } = upload;
         if (error) {
             console.log("unable to upload file")
         }
-        const geturl = await supabase.storage.from("Profilepic").getPublicUrl(filename);
-        const customUrl = geturl.data.publicUrl;
-        console.log(customUrl)
-        if (!customUrl) {
+        const getUrl = await supabase.storage.from("Profilepic").getPublicUrl(profileName);
+        const profileUrl = getUrl.data.publicUrl;
+        if (!profileUrl) {
             console.log('no url found')
             return
         }
-        setProfile({ id: filename, url: customUrl })
-
+        setProfile({ id: profileName, url: profileUrl });
+        uploadImgref.current.value = '';
     }
+
+    localStorage.setItem('profilePic', Profile.url)
 
 
     return (
