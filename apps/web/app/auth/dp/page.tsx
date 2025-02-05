@@ -5,39 +5,38 @@ import Image, { StaticImageData } from 'next/image'
 import { Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7, Avatar8, Avatar9, Avatar10, Avatar11, Avatar12, Avatar13, Avatar14 } from '../../../public/Dp/index';
 import { Button, Input } from '../../../components';
 import Link from 'next/link';
-import { supabase } from '../../../lib/superBase/superbaseClient';
-import { error } from 'console';
+import { supabase, avatarsPublicurl } from '../../../lib/superBase/superbaseClient';
 
-console.log(supabase)
+
+const url = "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/"
 const avatarData = [
-    { id: 'avatar2', avatarImg: Avatar2, },
-    { id: 2, avatarImg: Avatar3 },
-    { id: 3, avatarImg: Avatar4 },
-    { id: 4, avatarImg: Avatar5 },
-    { id: 5, avatarImg: Avatar6 },
-    // { id: 6, avatarImg: Avatar7 },
-    { id: 7, avatarImg: Avatar8 },
-    { id: 8, avatarImg: Avatar9 },
-    { id: 9, avatarImg: Avatar10 },
-    { id: 10, avatarImg: Avatar11 },
-    { id: 11, avatarImg: Avatar12 },
-    { id: 12, avatarImg: Avatar13 },
-    { id: 13, avatarImg: Avatar14 }
+    { id: 'Avatar2.svg', url: `${url}Avatar2.svg` },
+    { id: 'Avatar3.svg', url: `${url}Avatar3.svg` },
+    { id: 'Avatar4.svg', url: `${url}Avatar4.svg` },
+    { id: 'Avatar5.svg', url: `${url}Avatar5.svg` },
+    { id: 'Avatar6.svg', url: `${url}Avatar6.svg` },
+    { id: 'Avatar8.svg', url: `${url}Avatar8.svg` },
+    { id: 'Avatar9.svg', url: `${url}Avatar9.svg` },
+    { id: 'Avatar10.svg', url: `${url}Avatar10.svg` },
+    { id: 'Avatar11.svg', url: `${url}Avatar11.svg` },
+    { id: 'Avatar12.svg', url: `${url}Avatar12.svg` },
+    { id: 'Avatar13.svg', url: `${url}Avatar13.svg` },
+    { id: 'Avatar14.svg', url: `${url}Avatar14.svg` }
 ];
 
+
 type Profile = {
-    id: number,
-    avatarImg: StaticImageData
+    id: string,
+    url: string
 }
 
 
 const page = () => {
-    const [Profile, setProfile] = useState<Profile>({ id: 1, avatarImg: Avatar2 },)
+    const [Profile, setProfile] = useState<Profile>({ id: 'Avatar2.svg', avatarImg: Avatar2, url: "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/Avatar2.svg" })
     const [customUrl, setCustomurl] = useState('')
     const bioRef = useRef<HTMLInputElement>(null)
     const uploadImgref = useRef<HTMLInputElement>(null)
-
-
+    console.log(Profile)
 
     const selectImage = () => {
         uploadImgref.current?.click();
@@ -69,25 +68,21 @@ const page = () => {
             console.log('no url found')
             return
         }
-        setCustomurl(customUrl)
+        setProfile({ id: filename, url: customUrl })
 
     }
 
-    const getavatarUrl = async () => {
-        const geturl = await supabase.storage.from("appAvatars").getPublicUrl('Avatar12.svg');
-        console.log(geturl)
-    }
 
     return (
         <section className='w-screen flex justify-start pt-16 items-start h-screen bg-white'>
             <div className='w-52 h-screen border-r flex flex-col justify-start space-y-4 items-center border-neutral-300'>
-                {Profile && <Image key={Profile.id} className='w-36' alt='avatar1' src={Profile.avatarImg} />}
-                {customUrl && <Image key={21} width={200} height={200} quality={100} priority className='w-36' alt='avatar1' src={customUrl} />}
+                <div className='w-32 h-32 overflow-hidden rounded-full'>
+                    {Profile && <Image key={Profile.id} width={200} height={200} quality={100} priority className='w-36 overflow-hidden' alt='avatar1' src={Profile.url} />}
+                </div>
                 <div onClick={selectImage} className='w-fit h-fit flexColcenter'>
                     <Button size='default' text='upload image' variant='secondary' />
                     <input onChange={uploadImg} ref={uploadImgref} className='hidden' type='file' />
                 </div>
-                <button onClick={getavatarUrl}>getPublicUrl</button>
 
             </div>
             <div className='w-full flex flex-col pl-6 justify-start items-start h-full space-y-2 bg-white'>
@@ -95,7 +90,7 @@ const page = () => {
                     <span className='text-xs font-semibold text-neutral-700'>Avatars</span>
                     <div className='flex flex-wrap max-w-lg justify-start gap-2 items-center w-full'>
                         {avatarData.map((item) => (
-                            <Image onClick={() => setProfile(item)} className={`border-2 ${Profile.id === item.id ? 'border-green-500 scale-110' : null}  rounded-full`} key={item.id} src={item.avatarImg} alt='avtarimg' />
+                            <Image width={100} height={100} onClick={() => setProfile({ id: item.id, url: `${url}${item.id}` })} className={`border-2 ${Profile.id === item.id ? 'border-green-500 scale-110' : null}  rounded-full`} key={item.id} src={item.url} alt='avtarimg' />
                         ))}
                     </div>
                 </div>
