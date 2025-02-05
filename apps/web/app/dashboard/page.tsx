@@ -8,6 +8,7 @@ import { Plus, UserPlus, Loader } from "lucide-react"
 import { useRouter } from 'next/navigation'
 import { AppDispatch } from '../../lib/store/store'
 import { useAppDispatch } from '../../lib/store/hook'
+import Profilecard from '../../components/dashboard/Profilecard'
 import { addUserdata } from '../../lib/store/user/userdataSlice'
 
 
@@ -54,12 +55,15 @@ function Home() {
 
 
     return (
-        <div className='flexCenter w-full h-screen'>
+        <div className='flexColcenter w-full h-screen'>
+            <div className='w-full'>
+                <Profilecard />
+            </div>
             <div className='flexCenter w-fit h-fit space-x-3'>
                 <SpaceCard icon={loader ? <Loader /> : <Plus />} handleClick={createRoom} type='Create space' refer={createNameref} />
                 <SpaceCard icon={loader ? <Loader /> : <UserPlus />} handleClick={joinRoom} type='Join space' refer={joinNameref} />
             </div>
-        </div>
+        </div >
     )
 }
 

@@ -1,11 +1,13 @@
 import { Router } from "express";
 import { Request, Response } from "express";
 import { prisma } from "@repo/db/client"
+import { authmiddleware } from "../middlewares/auth";
 import bcrypt from "bcrypt"
 import { JWT_SECRET } from "@repo/common/jwtSecret";
 import jwt from "jsonwebtoken"
 import { signinSchema, signupSchema } from "@repo/common2/zod"
 import { deflate } from "zlib";
+import { error } from "console";
 
 console.log("env secret is:-", JWT_SECRET);
 
@@ -122,7 +124,7 @@ userRouter.post('/signin', (req: Request, res: Response) => {
 
 });
 
-userRouter.get('/getData', async (req: Request, res: Response) => {
+userRouter.get('/getData', authmiddleware, async (req: Request, res: Response) => {
     const id = req.id;
 
     try {
@@ -137,6 +139,47 @@ userRouter.get('/getData', async (req: Request, res: Response) => {
                 data: { name, email }
             })
         }
+    } catch (error) {
+        res.status(411).send({
+            err: "can not get the userdata",
+            details: error
+        })
+    }
+});
+
+userRouter.post('/updateInfo', authmiddleware, async (req: Request, res: Response) => {
+    const id = req.id;
+    const { url, bio } = req.body;
+    console.log(id)
+    try {
+        if (!url) {
+            res.send({
+                err: "the image url is not valid",
+            });
+            return
+        };
+
+        const userData = await prisma.user.update({
+            where: {
+                id: id
+            },
+            data: {
+                imgUrl: url,
+                bio: bio
+            }
+        });
+        if (!userData) {
+            res.send({
+                err: "your userData is missing please login",
+                details: error
+            });
+            return
+        }
+        res.send({
+            msg: "the data updated successfully",
+            details: userData
+        })
+
     } catch (error) {
         res.status(411).send({
             err: "can not get the userdata",

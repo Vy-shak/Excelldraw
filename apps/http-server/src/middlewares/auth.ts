@@ -4,8 +4,8 @@ import { Response, NextFunction, Request } from "express";
 import { JWT_SECRET } from "@repo/common/jwtSecret";
 
 function authmiddleware(req: Request, res: Response, next: NextFunction) {
-    const authtoken = req.headers["authtoken"]
-    console.log(authtoken)
+    const authtoken = req.headers["authtoken"];
+    console.log('the token', authtoken)
     console.log(typeof authtoken)
 
 

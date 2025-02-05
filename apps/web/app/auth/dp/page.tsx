@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { Button, Input } from '../../../components';
 import Link from 'next/link';
 import { supabase, avatarsPublicurl } from '../../../lib/superBase/superbaseClient';
+import axios from 'axios';
+import { profile } from 'console';
 
 
 const url = "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/"
@@ -34,8 +36,8 @@ const page = () => {
     const [Profile, setProfile] = useState<Profile>({ id: 'Avatar2.svg', url: "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/Avatar2.svg" })
     const [customUrl, setCustomurl] = useState('')
     const bioRef = useRef<HTMLInputElement>(null)
-    const uploadImgref = useRef<HTMLInputElement>(null)
-    console.log(Profile)
+    const uploadImgref = useRef<HTMLInputElement>(null);
+    const token = localStorage.getItem("token");
 
     const selectImage = () => {
         uploadImgref.current?.click();
@@ -70,6 +72,22 @@ const page = () => {
         uploadImgref.current.value = '';
     }
 
+    const uploadProfile = async () => {
+        console.log(token)
+        try {
+            if (token) {
+                const { data } = await axios.post("http://localhost:3002/user/updateInfo", { url: Profile.url, bio: bioRef.current?.value }, {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authtoken': token
+                    }
+                })
+            }
+        } catch (error) {
+            throw error
+        }
+    }
+
     localStorage.setItem('profilePic', Profile.url)
 
 
@@ -90,7 +108,7 @@ const page = () => {
                     <span className='text-xs font-semibold text-neutral-700'>Avatars</span>
                     <div className='flex flex-wrap max-w-lg justify-start gap-2 items-center w-full'>
                         {avatarData.map((item) => (
-                            <Image width={100} height={100} onClick={() => setProfile({ id: item.id, url: `${url}${item.id}` })} className={`border-2 ${Profile.id === item.id ? 'border-green-500 scale-110' : null}  rounded-full`} key={item.id} src={item.url} alt='avtarimg' />
+                            <Image width={100} height={100} onClick={() => setProfile({ id: item.id, url: `${url}${item.id}` })} className={`border-2 ${Profile.id === item.id ? 'border-green-500 scale-110 cursor-pointer' : null}  rounded-full`} key={item.id} src={item.url} alt='avtarimg' />
                         ))}
                     </div>
                 </div>
@@ -99,9 +117,12 @@ const page = () => {
                     {bioRef && <Input reference={bioRef} varient='bio' Size='bio' type='text' />}
                 </div>
             </div>
-            <Link href={'/dashboard'}>
-                <span className='text-xs absolute right-10 bottom-10 font-semibold text-neutral-700'>Skip</span>
-            </Link>
+            <div className='flexCenter w-fit h-fit absolute space-x-2 right-10 bottom-10 '>
+                <Button handleClick={uploadProfile} text='save info' variant='secondary' size='default' />
+                <Link href={'/dashboard'}>
+                    <span className='text-xs font-semibold text-neutral-700'>Skip</span>
+                </Link>
+            </div>
         </section>
     )
 }
