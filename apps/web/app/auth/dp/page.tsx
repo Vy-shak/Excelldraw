@@ -1,11 +1,14 @@
 "use client"
+
 import React, { useState, useRef, } from 'react'
 import Image, { StaticImageData } from 'next/image'
 import { Avatar1, Avatar2, Avatar3, Avatar4, Avatar5, Avatar6, Avatar7, Avatar8, Avatar9, Avatar10, Avatar11, Avatar12, Avatar13, Avatar14 } from '../../../public/Dp/index';
-import { Input } from '../../../components';
+import { Button, Input } from '../../../components';
 import Link from 'next/link';
+import { supabase } from '../../../lib/superBase/superbaseClient';
+import { error } from 'console';
 
-
+console.log(supabase)
 const avatarData = [
     { id: 1, avatarImg: Avatar2 },
     { id: 2, avatarImg: Avatar3 },
@@ -27,13 +30,59 @@ type Profile = {
     avatarImg: StaticImageData
 }
 
+
 const page = () => {
     const [Profile, setProfile] = useState<Profile>({ id: 1, avatarImg: Avatar2 },)
+    const [customUrl, setCustomurl] = useState('')
     const bioRef = useRef<HTMLInputElement>(null)
+    const uploadImgref = useRef<HTMLInputElement>(null)
+
+
+
+    const selectImage = () => {
+        uploadImgref.current?.click();
+        console.log('clicked')
+    };
+
+    const uploadImg = async () => {
+        const files = uploadImgref.current?.files;
+        if (!files) {
+            console.log("files is not present");
+            return
+        }
+        const file = files[0];
+        if (!file) {
+            console.log("file is not present");
+            return
+        }
+        const randomId = Math.random()
+        const filename = `${randomId}customProfile`
+        const upload = await supabase.storage.from('Profilepic').upload(filename, file);
+        const { error } = upload;
+        if (error) {
+            console.log("unable to upload file")
+        }
+        const geturl = await supabase.storage.from("Profilepic").getPublicUrl(filename);
+        const customUrl = geturl.data.publicUrl;
+        console.log(customUrl)
+        if (!customUrl) {
+            console.log('no url found')
+            return
+        }
+        setCustomurl(customUrl)
+
+    }
+
     return (
         <section className='w-screen flex justify-start pt-16 items-start h-screen bg-white'>
-            <div className='w-52 h-screen border-r flex justify-center items-start border-neutral-300'>
+            <div className='w-52 h-screen border-r flex flex-col justify-start space-y-4 items-center border-neutral-300'>
                 {Profile && <Image key={Profile.id} className='w-36' alt='avatar1' src={Profile.avatarImg} />}
+                {customUrl && <Image key={21} width={200} height={200} quality={100} priority className='w-36' alt='avatar1' src={customUrl} />}
+                <div onClick={selectImage} className='w-fit h-fit flexColcenter'>
+                    <Button size='default' text='upload image' variant='secondary' />
+                    <input onChange={uploadImg} ref={uploadImgref} className='hidden' type='file' />
+                </div>
+
             </div>
             <div className='w-full flex flex-col pl-6 justify-start items-start h-full space-y-2 bg-white'>
                 <div className='flex flex-col space-y-3 justify-start items-start'>
