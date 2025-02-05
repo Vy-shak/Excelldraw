@@ -4,9 +4,11 @@ import React, { useState, useRef, } from 'react'
 import Image from 'next/image';
 import { Button, Input } from '../../../components';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { supabase, avatarsPublicurl } from '../../../lib/superBase/superbaseClient';
 import axios from 'axios';
 import { profile } from 'console';
+import { userAgent } from 'next/server';
 
 
 const url = "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/"
@@ -34,9 +36,9 @@ type Profile = {
 
 const page = () => {
     const [Profile, setProfile] = useState<Profile>({ id: 'Avatar2.svg', url: "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/Avatar2.svg" })
-    const [customUrl, setCustomurl] = useState('')
     const bioRef = useRef<HTMLInputElement>(null)
     const uploadImgref = useRef<HTMLInputElement>(null);
+    const router = useRouter();
     const token = localStorage.getItem("token");
 
     const selectImage = () => {
@@ -81,11 +83,14 @@ const page = () => {
                         'Content-Type': 'application/json',
                         'authtoken': token
                     }
-                })
+                });
+                if (data) {
+                    router.push('/dashboard')
+                }
             }
         } catch (error) {
             throw error
-        }
+        };
     }
 
     localStorage.setItem('profilePic', Profile.url)
