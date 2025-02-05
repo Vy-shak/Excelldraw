@@ -10,7 +10,7 @@ import { error } from 'console';
 
 console.log(supabase)
 const avatarData = [
-    { id: 1, avatarImg: Avatar2 },
+    { id: 'avatar2', avatarImg: Avatar2, },
     { id: 2, avatarImg: Avatar3 },
     { id: 3, avatarImg: Avatar4 },
     { id: 4, avatarImg: Avatar5 },
@@ -73,6 +73,11 @@ const page = () => {
 
     }
 
+    const getavatarUrl = async () => {
+        const geturl = await supabase.storage.from("appAvatars").getPublicUrl('Avatar12.svg');
+        console.log(geturl)
+    }
+
     return (
         <section className='w-screen flex justify-start pt-16 items-start h-screen bg-white'>
             <div className='w-52 h-screen border-r flex flex-col justify-start space-y-4 items-center border-neutral-300'>
@@ -82,6 +87,7 @@ const page = () => {
                     <Button size='default' text='upload image' variant='secondary' />
                     <input onChange={uploadImg} ref={uploadImgref} className='hidden' type='file' />
                 </div>
+                <button onClick={getavatarUrl}>getPublicUrl</button>
 
             </div>
             <div className='w-full flex flex-col pl-6 justify-start items-start h-full space-y-2 bg-white'>
