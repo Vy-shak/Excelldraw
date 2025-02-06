@@ -32,8 +32,8 @@ roomRouter.post('/create', authmiddleware, async (req, res) => {
 
             res.send({
                 msg: 'room created successfully',
-                code: room.roomCode,
-                roomName: room.roomname
+                code: room["roomCode"],
+                roomName: room["roomname"]
             })
         }
         else {

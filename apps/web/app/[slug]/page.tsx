@@ -11,13 +11,27 @@ import axios from 'axios';
 import { addUserdata } from '../../lib/store/user/userdataSlice';
 import { addMessages } from '../../lib/store/chat/messageSlice';
 
+
+interface userData {
+    id: number,
+    name: string,
+    email: string,
+    password: string,
+    bio: 'string',
+    imgUrl: string,
+    updatedAt: string
+}
+
 function page() {
     const selectedTool = useAppSelector((state) => state.tool);
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const params = useParams<{ slug: string }>();
     const socketRef = useRef<WebSocket | null>(null)
     const dispatch = useAppDispatch();
-    const [socketOn, setOnsocket] = useState(false)
+    const token = localStorage.getItem('token')
+    const [userData, setUserdata] = useState<userData>()
+    const [socketOn, setOnsocket] = useState(false);
+
 
     useEffect(() => {
         if (canvasRef.current) {
@@ -33,7 +47,21 @@ function page() {
             else {
                 console.log("token is not valid")
             }
-        }
+        };
+
+        (async function getuserData() {
+            try {
+                const { data } = await axios.get("http://localhost:3002/user/getData", {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'authtoken': token
+                    }
+                });
+                setUserdata(data)
+            } catch (error) {
+                throw error
+            }
+        })()
     }, []);
 
     useEffect(() => {
@@ -50,9 +78,7 @@ function page() {
                     console.log(parsedData)
                     if (parsedData) {
                         Socketmsg(canvasRef.current!, parsedData)
-                    }
-                    if (parsedData.type === 'chat') {
-                        dispatch(addMessages(parsedData.message))
+                        dispatch(addMessages(parsedData))
                     }
                     const details = parsedData
                     const { roomname, roomCode } = details[0]
@@ -73,21 +99,7 @@ function page() {
         };
     }, [selectedTool, socketRef.current])
 
-    useEffect(() => {
-        const token = localStorage.getItem('token');
 
-        (async function getUserdata() {
-            if (token) {
-                const userData = await axios.get("http://localhost:3002/user/getData", {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'token': token
-                    },
-                });
-                console.log(userData)
-            }
-        })()
-    }, [])
 
 
 
@@ -97,7 +109,7 @@ function page() {
             backgroundSize: '20px 20px',
         }} className='w-screen flex flex-col justify-center items-center  h-screen overflow-hidden bg-neutral-50'>
             <Topbar />
-            {socketOn && socketRef.current && <Chatbox socket={socketRef.current} />}
+            {socketOn && socketRef.current && userData && <Chatbox username={userData.name} url={userData?.imgUrl} socket={socketRef.current} />}
             <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
             {<Toolbox />}
         </div>

@@ -21,17 +21,23 @@ type shape = {
     startX: number,
     startY: number,
     radius: number,
+} | {
+    type: 'chat',
+    message: string,
+    userName: string,
+    url: string,
 }
 
 
 type parsedData = {
     type: 'chat',
     message: string,
+    userName: string,
+    url: string,
 } | { type: 'shape', shape: shape } | { type: 'join' } | { type: 'leave' } | { type: 'clearAll' }
 
 let allSocket = new Map();
 let allDrawings: shape[] = [];
-let allchats = [];
 
 wss.on('connection', async function connection(socket, req) {
     socket.on('error', console.error);
@@ -84,8 +90,8 @@ wss.on('connection', async function connection(socket, req) {
             if (parsedData) {
                 channel.map((item: channel) => {
                     if (parsedData.type === 'chat') {
-                        allchats.push(parsedData)
-                        const allChatstring = JSON.stringify(allchats)
+                        allDrawings.push(parsedData)
+                        const allChatstring = JSON.stringify(allDrawings)
                         item.socket.send(allChatstring)
                     }
 

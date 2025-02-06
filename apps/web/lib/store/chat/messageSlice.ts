@@ -1,6 +1,13 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: string[] = [];
+interface chats {
+    type: "chat",
+    message: string,
+    userName: string,
+    url: string
+}
+
+const initialState: chats[] = [];
 
 
 const messageSlice = createSlice({
@@ -8,7 +15,7 @@ const messageSlice = createSlice({
     initialState: initialState,
     reducers: {
         add(state, action) {
-            state.push(action.payload)
+            return action.payload
         }
     }
 });

@@ -23,7 +23,7 @@ model User {
 
 model Rooms {
   id       Int        @id @default(autoincrement())
-  roomname String     @unique
+  roomname String
   roomCode String     @default(uuid())
   adminId  Int
   admin    User       @relation(fields: [adminId], references: [id])

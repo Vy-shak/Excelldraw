@@ -21,7 +21,7 @@ function Home() {
     const dispatch = useAppDispatch()
     console.log('hello', createNameref.current?.value)
 
-
+    const token = localStorage.getItem("token")
     const createRoom = async () => {
         try {
             if (createNameref.current?.value) {
@@ -31,7 +31,7 @@ function Home() {
                 }, {
                     headers: {
                         "Content-Type": "application/json",
-                        "authToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MywiaWF0IjoxNzM3MTEzMjI1fQ.qEyTcUlWgKnDWJITKttrfdZvliE4qGPz1t2FkuXFTmM"
+                        "authToken": token
                     }
                 });
                 const { code, roomName } = data
