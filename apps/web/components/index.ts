@@ -5,7 +5,8 @@ import Toolbox from "./Toolbox";
 import Topbar from "./canvas/Topbar";
 import Chatbox from "./canvas/Chatbox";
 import Messagebox from "./canvas/Messagebox";
-import Avatarbox from "./userProfile/Avatarbox";
+import Navmenu from "./dashboard/Navmenu";
+import Navbar from "./dashboard/Navbar";
 
 
-export { Button, Avatarbox, Messagebox, Chatbox, Input, SpaceCard, Toolbox, Topbar }
+export { Button, Navmenu, Navbar, Messagebox, Chatbox, Input, SpaceCard, Toolbox, Topbar }
