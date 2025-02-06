@@ -55,8 +55,8 @@ function Home() {
 
 
     return (
-        <div className='flexColcenter w-full h-screen'>
-            <div className='w-full'>
+        <div className='flex justify-start items-center pt-6 space-y-6 flex-col w-full h-screen'>
+            <div className='w-full flexCenter'>
                 <Profilecard />
             </div>
             <div className='flexCenter w-fit h-fit space-x-3'>

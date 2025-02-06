@@ -128,16 +128,14 @@ userRouter.get('/getData', authmiddleware, async (req: Request, res: Response) =
     const id = req.id;
 
     try {
+        console.log("getdata comming", id)
         const userData = await prisma.user.findFirst({
             where: {
                 id: id
             }
         });
         if (userData) {
-            const { name, email } = userData
-            res.status(200).send({
-                data: { name, email }
-            })
+            res.status(200).send(userData)
         }
     } catch (error) {
         res.status(411).send({
