@@ -7,7 +7,7 @@ interface navmenu {
 }
 
 
-const Navmenu = ({ Icon, text }: navmenu) => {
+const Sidemenu = ({ Icon, text }: navmenu) => {
     return (
         <div className='w-full pl-3 space-x-3 flex justify-normal items-center h-8 bg-green-400'>
             {Icon}
@@ -16,4 +16,4 @@ const Navmenu = ({ Icon, text }: navmenu) => {
     )
 }
 
-export default Navmenu
+export default Sidemenu

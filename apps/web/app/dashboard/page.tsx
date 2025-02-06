@@ -3,8 +3,8 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useRef } from 'react'
-import { SpaceCard, Navbar } from '../../components'
-import { Plus, UserPlus, Loader } from "lucide-react"
+import { SpaceCard, Sidebar, Sidemenu } from '../../components'
+import { Plus, UserPlus, Loader, } from "lucide-react"
 import { useRouter } from 'next/navigation'
 import { AppDispatch } from '../../lib/store/store'
 import { useAppDispatch } from '../../lib/store/hook'
@@ -56,7 +56,7 @@ function Home() {
 
     return (
         <div className='flex justify-start items-center pt-6 space-y-6 flex-col w-full h-screen'>
-            <Navbar />
+            <Sidebar />
             <div className='w-full flexCenter'>
                 <Profilecard />
             </div>
