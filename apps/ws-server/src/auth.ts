@@ -8,7 +8,12 @@ function authCheck(token: string) {
         if (JWT_SECRET) {
             const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload
             console.log('decoded', decoded)
-            return decoded.id
+            if (decoded) {
+                return decoded.id
+            }
+            else {
+                return null
+            }
         }
         else {
             return null

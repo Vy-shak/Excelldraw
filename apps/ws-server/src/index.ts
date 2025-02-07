@@ -4,6 +4,26 @@ import { validationCheck, addtoroom } from "./actions";
 const wss = new WebSocketServer({ port: 8080 });
 
 
+type parsedData = {
+    type: 'chat',
+    message: string,
+    userName: string,
+    url: string,
+    roomcode: string
+} | {
+    type: 'rect',
+    startX: number,
+    startY: number,
+    width: number,
+    height: number,
+    roomcode: string
+} | {
+    type: 'circle',
+    startX: number,
+    startY: number,
+    radius: number,
+    roomcode: string
+}
 
 
 interface roomDetails {
@@ -32,8 +52,16 @@ wss.on('connection', async function connection(socket, req) {
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     const token = urlParams.get('token');
     const roomcode = urlParams.get('roomcode');
-
+    console.log("token", token)
+    console.log("roomcode", roomcode)
     const roomDetails = await validationCheck(roomcode, token, wss, socket);
+
+
+    if (!roomDetails) {
+        wss.close()
+    } else {
+        addtoroom(socket, roomDetails, store)
+    }
 
 
     socket.on('message', function message(data) {

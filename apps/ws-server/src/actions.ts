@@ -26,7 +26,6 @@ const validationCheck = async (roomcode: string | null, token: string | null, ws
     if (!roomcode) {
         const errMsg = { type: 'error', message: "no roomcode! please join again" }
         socket.send(JSON.stringify(errMsg));
-        wss.close();
         return null
     }
 
@@ -86,7 +85,7 @@ const addtoroom = (socket: WebSocket, roomDetails: parseValidation, store: Map<s
 
     const members = store.get(roomCode)
     const roomSuccess = { type: 'join', roomcode: roomCode, roomname: roomname, members: members?.sockets };
-
+    socket.send(JSON.stringify(roomSuccess))
 
 }
 

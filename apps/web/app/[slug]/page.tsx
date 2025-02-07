@@ -30,9 +30,10 @@ function page() {
     const dispatch = useAppDispatch();
     const token = localStorage.getItem('token')
     const [userData, setUserdata] = useState<userData>()
+    const [roomData, setroomData] = useState()
     const [socketOn, setOnsocket] = useState(false);
 
-
+    console.log("here", roomData)
     useEffect(() => {
         if (canvasRef.current) {
             const token = localStorage.getItem('token');
@@ -75,13 +76,14 @@ function page() {
 
                 socketRef.current!.onmessage = function (event) {
                     const parsedData = JSON.parse(event.data);
-                    console.log(parsedData)
+                    console.log("yppdd:-", parsedData)
+
+                    if (parsedData.type === 'join') {
+                        const { roomcode, roomname } = parsedData
+                        setroomData({ roomcode, roomname })
+                    }
                     if (parsedData.type === 'rect' || 'circle') {
                         Socketmsg(canvasRef.current!, parsedData)
-                    }
-                    if (parsedData.type === 'join') {
-                        const { roomname, roomcode } = parsedData;
-                        dispatch(addUserdata({ roomname: roomname, roomcode: roomcode }))
                     }
                     if (parsedData.type === 'chat') {
                         dispatch(addMessages(parsedData))
@@ -109,7 +111,7 @@ function page() {
             background: 'radial-gradient(circle, #dbdbdb 1px, transparent 1px)',
             backgroundSize: '20px 20px',
         }} className='w-screen flex flex-col justify-center items-center  h-screen overflow-hidden bg-neutral-50'>
-            <Topbar />
+            <Topbar details={roomData} />
             {socketOn && socketRef.current && userData && <Chatbox username={userData.name} url={userData?.imgUrl} socket={socketRef.current} />}
             <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
             {<Toolbox />}
