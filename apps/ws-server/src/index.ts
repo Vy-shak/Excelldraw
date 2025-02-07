@@ -79,9 +79,10 @@ wss.on('connection', async function connection(socket, req) {
         if (parsedData.type === 'chat') {
             const members = store.get(parsedData.roomcode);
             const sockets = members?.sockets;
-
+            store.get(parsedData.roomcode)?.chats.push(parsedData)
+            const allMessages = store.get(parsedData.roomcode)?.chats
             sockets?.map((item: roomDetails) => {
-                item.socket.send(JSON.stringify(parsedData))
+                item.socket.send(JSON.stringify({ type: 'chat', chats: allMessages }))
             })
         }
         if (parsedData.type === 'rect' || parsedData.type === 'circle') {
@@ -92,7 +93,7 @@ wss.on('connection', async function connection(socket, req) {
             const allShapes = store.get(parsedData.roomcode)?.shapes
 
             sockets?.map((item: roomDetails) => {
-                item.socket.send(JSON.stringify(allShapes))
+                item.socket.send(JSON.stringify({ type: 'shape', shapes: allShapes }))
             })
         }
     });

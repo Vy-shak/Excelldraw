@@ -69,12 +69,12 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
     globalshapes = shapes;
     shapes.map((item) => {
         const { shape, startX, startY, width, height, radius, text } = item
-        if (shape === 'rect') {
+        if (item.type === 'rect') {
             ctx!.strokeStyle = 'black';
             ctx!.setLineDash([5, 3]);
             ctx!.strokeRect(startX, startY, width, height);
         }
-        if (shape === 'circle') {
+        if (item.type === 'circle') {
             ctx!.strokeStyle = 'black';
             ctx!.beginPath();
             ctx!.arc(startX, startY, radius, 0, 6.283);

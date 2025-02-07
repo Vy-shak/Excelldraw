@@ -4,7 +4,8 @@ interface chats {
     type: "chat",
     message: string,
     userName: string,
-    url: string
+    url: string,
+    roomcode: string
 }
 
 const initialState: chats[] = [];

@@ -32,9 +32,8 @@ function page() {
     const [roomData, setroomData] = useState()
     const [socketOn, setOnsocket] = useState(false);
     const token = localStorage.getItem('token');
-    const slug = params.slug
+    const slug = params.slug;
 
-    console.log("here", roomData)
     useEffect(() => {
         if (canvasRef.current) {
             if (token && slug) {
@@ -66,11 +65,8 @@ function page() {
 
     useEffect(() => {
         let cleanup: (() => void) | undefined = undefined
-        console.log("renderig again")
         if (socketRef.current) {
-            console.log("hellos")
             if (canvasRef.current && socketRef.current) {
-                console.log("heyy")
                 cleanup = startDraw(canvasRef.current, selectedTool, socketRef.current, slug);
 
                 socketRef.current!.onmessage = function (event) {
@@ -81,11 +77,13 @@ function page() {
                         const { roomcode, roomname } = parsedData
                         setroomData({ roomcode, roomname })
                     }
-                    if (parsedData.type === 'rect' || 'circle') {
-                        Socketmsg(canvasRef.current!, parsedData)
+                    else if (parsedData.type === 'shape') {
+                        console.log('calling socket')
+                        Socketmsg(canvasRef.current!, parsedData.shapes)
                     }
-                    if (parsedData.type === 'chat') {
-                        dispatch(addMessages(parsedData))
+                    else if (parsedData.type === 'chat') {
+                        console.log("the chatts")
+                        dispatch(addMessages(parsedData.chats))
                     }
                 }
             }
@@ -111,7 +109,7 @@ function page() {
             backgroundSize: '20px 20px',
         }} className='w-screen flex flex-col justify-center items-center  h-screen overflow-hidden bg-neutral-50'>
             <Topbar details={roomData} />
-            {socketOn && socketRef.current && userData && <Chatbox username={userData.name} url={userData?.imgUrl} socket={socketRef.current} />}
+            {socketOn && socketRef.current && userData && <Chatbox username={userData.name} url={userData?.imgUrl} socket={socketRef.current} roomcode={slug} />}
             <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
             {<Toolbox />}
         </div>

@@ -10,14 +10,15 @@ import { useAppSelector } from '../../lib/store/hook'
 interface chatbox {
     socket: WebSocket,
     username: string,
-    url: string
+    url: string,
+    roomcode: string
 }
 
-function Chatbox({ socket, url, username }: chatbox) {
+function Chatbox({ socket, url, username, roomcode }: chatbox) {
+    console.log("roomcode:-", roomcode)
     const chats = useAppSelector((state) => state.message)
     const MessageRef = useRef<HTMLInputElement>(null);
     console.log('got the socket in chat', socket)
-    const msg = ['kdfkj']
     const [isChat, setIschat] = useState(false);
 
     console.log("alldata", chats)
@@ -32,7 +33,7 @@ function Chatbox({ socket, url, username }: chatbox) {
 
     const sendMessage = () => {
         console.log('clicked chat')
-        socket.send(JSON.stringify({ type: 'chat', message: MessageRef.current?.value, userName: username, url: url }));
+        socket.send(JSON.stringify({ type: 'chat', message: MessageRef.current?.value, userName: username, url: url, roomcode: roomcode }));
         if (MessageRef.current?.value) {
             MessageRef.current.value = '';
         }
