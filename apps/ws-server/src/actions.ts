@@ -80,4 +80,4 @@ const addtoroom = (socket: WebSocket, roomDetails: parseValidation, store: Map<s
     }
 }
 
-export { validationCheck }
+export { validationCheck, addtoroom }
