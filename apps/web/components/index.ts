@@ -7,6 +7,7 @@ import Chatbox from "./canvas/Chatbox";
 import Messagebox from "./canvas/Messagebox";
 import Sidemenu from "./dashboard/Sidemenu";
 import Sidebar from "./dashboard/Sidebar";
+import Navbar from "./dashboard/Navbar";
 
 
-export { Button, Sidemenu, Sidebar, Messagebox, Chatbox, Input, SpaceCard, Toolbox, Topbar }
+export { Button, Navbar, Sidemenu, Sidebar, Messagebox, Chatbox, Input, SpaceCard, Toolbox, Topbar }
