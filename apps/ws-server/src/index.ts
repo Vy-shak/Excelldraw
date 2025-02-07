@@ -5,28 +5,6 @@ import { prisma } from "@repo/db/client"
 const wss = new WebSocketServer({ port: 8080 });
 
 
-interface channel {
-    socket: WebSocket,
-    userId: number
-}
-
-type shape = {
-    type: 'rect',
-    startX: number,
-    startY: number,
-    width: number,
-    height: number
-} | {
-    type: 'circle',
-    startX: number,
-    startY: number,
-    radius: number,
-} | {
-    type: 'chat',
-    message: string,
-    userName: string,
-    url: string,
-}
 
 
 type parsedData = {
@@ -34,7 +12,21 @@ type parsedData = {
     message: string,
     userName: string,
     url: string,
-} | { type: 'shape', shape: shape } | { type: 'join' } | { type: 'leave' } | { type: 'clearAll' }
+    roomcode: string
+} | {
+    type: 'rect',
+    startX: number,
+    startY: number,
+    width: number,
+    height: number,
+    roomcode: string
+} | {
+    type: 'circle',
+    startX: number,
+    startY: number,
+    radius: number,
+    roomcode: string
+}
 
 interface roomDetails {
     socket: WebSocket,
@@ -42,6 +34,10 @@ interface roomDetails {
     roomname: string,
     username?: string,
     profileUrl?: string
+}
+
+interface parseValidation {
+    userId: number, roomCode: string, roomname: string
 }
 
 interface store {
@@ -53,7 +49,6 @@ interface store {
 let store: Map<string, store> = new Map();
 
 // Roomid:{ sockets:[],shapes:[],chats:[]}
-let allDrawings: shape[] = [];
 
 wss.on('connection', async function connection(socket, req) {
     socket.on('error', console.error);
@@ -105,7 +100,7 @@ wss.on('connection', async function connection(socket, req) {
 
     if (!roomDetails) wss.close();
 
-    const addtoroom = (socket: WebSocket, roomDetails:) => {
+    const addtoroom = (socket: WebSocket, roomDetails: parseValidation) => {
         const { userId, roomCode, roomname } = roomDetails
         const roomData: roomDetails = { socket: socket, userId: userId, roomname: roomname };
         if (!store.has(roomCode)) {
@@ -117,56 +112,36 @@ wss.on('connection', async function connection(socket, req) {
 
             store.set(roomCode, value)
         }
-    }
-
-    if (userId && roomcode) {
-        const { roomname, roomCode } = roomexist;
-        const authData = [{ type: 'join', roomname: roomname, roomCode: roomCode }]
-        socket.send(JSON.stringify(authData));
-
-        if (typeof roomcode === "string") {
-            if (allSocket.has(roomcode)) {
-                let channel = allSocket.get(roomcode);
-                channel.push({ socket: socket, userId: userId });
-                allSocket.set(roomcode, channel);
-            }
-            else {
-                allSocket.set(roomcode, [{ socket: socket, userId: userId }]);
-            }
+        else {
+            store.get(roomCode)!.sockets.push(roomData)
         }
     }
+
+
     socket.on('message', function message(data) {
         const parsedData: parsedData = JSON.parse(data as unknown as string);
-        console.log(parsedData)
-        let channel = allSocket.get(roomcode);
 
-        if (parsedData) {
-            channel.map((item: channel) => {
-                if (parsedData.type === 'chat') {
-                    allDrawings.push(parsedData)
-                    const allChatstring = JSON.stringify(allDrawings)
-                    item.socket.send(allChatstring)
-                }
+        if (!parsedData) {
+            const errorData = { type: 'error', message: 'null message recived' }
+            socket.send(JSON.stringify(errorData));
+        };
 
-                if (parsedData.type === 'shape') {
-                    allDrawings.push(parsedData.shape);
-                    item.socket.send(JSON.stringify(allDrawings))
-                }
-                if (parsedData.type === 'clearAll') {
-                    console.log("hello")
-                    allDrawings = [];
-                    item.socket.send(JSON.stringify(allDrawings))
-                }
+        if (parsedData.type === 'chat') {
+            const members = store.get(parsedData.roomcode);
+            const sockets = members?.sockets;
 
-                if (parsedData.type === 'leave') {
-                    channel = channel.filter((item: channel) => {
-                        item.userId !== userId
-                    });
-                }
+            sockets?.map((item: roomDetails) => {
+                item.socket.send(JSON.stringify(parsedData))
+            })
+        }
+        if (parsedData.type === 'rect' || 'circle') {
+            const storeData = store.get(parsedData.roomcode);
+            const sockets = storeData?.sockets;
+            const allShapes = storeData?.shapes
+
+            sockets?.map((item: roomDetails) => {
+                item.socket.send(JSON.stringify(allShapes))
             })
         }
     });
-}
-
-
 })
