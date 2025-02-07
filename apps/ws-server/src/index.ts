@@ -4,13 +4,7 @@ import { validationCheck, addtoroom } from "./actions";
 const wss = new WebSocketServer({ port: 8080 });
 
 
-type parsedData = {
-    type: 'chat',
-    message: string,
-    userName: string,
-    url: string,
-    roomcode: string
-} | {
+type shapes = {
     type: 'rect',
     startX: number,
     startY: number,
@@ -25,8 +19,18 @@ type parsedData = {
     roomcode: string
 }
 
+type chats = {
+    type: 'chat',
+    message: string,
+    userName: string,
+    url: string,
+    roomcode: string
+}
 
-interface roomDetails {
+type parsedData = shapes | chats
+
+
+export interface roomDetails {
     socket: WebSocket,
     userId: number,
     roomname: string,
@@ -35,10 +39,10 @@ interface roomDetails {
 }
 
 
-interface store {
+export interface store {
     sockets: roomDetails[],
-    shapes: [],
-    chats: []
+    shapes: shapes[],
+    chats: chats[]
 }
 
 let store: Map<string, store> = new Map();
@@ -80,10 +84,12 @@ wss.on('connection', async function connection(socket, req) {
                 item.socket.send(JSON.stringify(parsedData))
             })
         }
-        if (parsedData.type === 'rect' || 'circle') {
+        if (parsedData.type === 'rect' || parsedData.type === 'circle') {
             const storeData = store.get(parsedData.roomcode);
             const sockets = storeData?.sockets;
-            const allShapes = storeData?.shapes
+            store.get(parsedData.roomcode)?.shapes.push(parsedData);
+
+            const allShapes = store.get(parsedData.roomcode)?.shapes
 
             sockets?.map((item: roomDetails) => {
                 item.socket.send(JSON.stringify(allShapes))

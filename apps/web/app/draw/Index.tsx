@@ -1,3 +1,5 @@
+import Roomcode from "../../components/canvas/Roomcode";
+
 type storeT = {
     shape: 'rect',
     startX: number,
@@ -46,7 +48,8 @@ function renderAll(ctx: CanvasRenderingContext2D) {
             }
         })
     }
-}
+};
+
 function renderpencil(ctx: CanvasRenderingContext2D) {
     if (globalPencil) {
         globalPencil.map((item) => {
@@ -55,7 +58,8 @@ function renderpencil(ctx: CanvasRenderingContext2D) {
             }
         })
     }
-}
+};
+
 
 function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
 
@@ -84,7 +88,7 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
     })
 }
 
-function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket,) {
+function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket, roomcode: string) {
     console.log("we got socket i shape", socket)
     console.log('currenttoolsss', selectedTool)
     let ctx = canvas.getContext("2d");
@@ -178,13 +182,13 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
 
         if (selectedTool === 'rect') {
             // store.push({ shape: 'rect', startX, startY, width, height });
-            const shapeData = { type: 'shape', shape: { shape: 'rect', startX, startY, width, height } }
+            const shapeData = { type: 'rect', startX, startY, width, height, roomcode: roomcode }
             socket.send(JSON.stringify(shapeData));
         }
 
         if (selectedTool === 'circle') {
             // store.push({ shape: 'circle', startX, startY, radius });
-            const shapeData = { type: 'shape', shape: { shape: 'circle', startX, startY, radius } }
+            const shapeData = { type: 'circle', startX, startY, radius, roomcode: roomcode }
             socket.send(JSON.stringify(shapeData));
         }
 

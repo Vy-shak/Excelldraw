@@ -1,22 +1,10 @@
 import { authCheck } from "./auth";
 import { prisma } from "@repo/db/client"
 import { WebSocketServer, WebSocket } from "ws";
+import { store, roomDetails } from ".";
 
 
-interface store {
-    sockets: roomDetails[],
-    shapes: [],
-    chats: []
-}
 
-
-interface roomDetails {
-    socket: WebSocket,
-    userId: number,
-    roomname: string,
-    username?: string,
-    profileUrl?: string
-}
 
 interface parseValidation {
     userId: number, roomCode: string, roomname: string

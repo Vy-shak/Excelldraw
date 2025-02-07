@@ -28,16 +28,15 @@ function page() {
     const params = useParams<{ slug: string }>();
     const socketRef = useRef<WebSocket | null>(null)
     const dispatch = useAppDispatch();
-    const token = localStorage.getItem('token')
     const [userData, setUserdata] = useState<userData>()
     const [roomData, setroomData] = useState()
     const [socketOn, setOnsocket] = useState(false);
+    const token = localStorage.getItem('token');
+    const slug = params.slug
 
     console.log("here", roomData)
     useEffect(() => {
         if (canvasRef.current) {
-            const token = localStorage.getItem('token');
-            const slug = params.slug
             if (token && slug) {
                 const ws = new WebSocket(`ws://localhost:8080?token=${token}&roomcode=${slug}`);
                 if (ws) {
@@ -72,7 +71,7 @@ function page() {
             console.log("hellos")
             if (canvasRef.current && socketRef.current) {
                 console.log("heyy")
-                cleanup = startDraw(canvasRef.current, selectedTool, socketRef.current);
+                cleanup = startDraw(canvasRef.current, selectedTool, socketRef.current, slug);
 
                 socketRef.current!.onmessage = function (event) {
                     const parsedData = JSON.parse(event.data);
