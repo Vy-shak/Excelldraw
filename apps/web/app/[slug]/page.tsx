@@ -76,14 +76,15 @@ function page() {
                 socketRef.current!.onmessage = function (event) {
                     const parsedData = JSON.parse(event.data);
                     console.log(parsedData)
-                    if (parsedData) {
+                    if (parsedData.type === 'rect' || 'circle') {
                         Socketmsg(canvasRef.current!, parsedData)
-                        dispatch(addMessages(parsedData))
                     }
-                    const details = parsedData
-                    const { roomname, roomCode } = details[0]
-                    if (roomname && roomCode) {
-                        dispatch(addUserdata({ roomname: roomname, roomcode: roomCode }))
+                    if (parsedData.type === 'join') {
+                        const { roomname, roomcode } = parsedData;
+                        dispatch(addUserdata({ roomname: roomname, roomcode: roomcode }))
+                    }
+                    if (parsedData.type === 'chat') {
+                        dispatch(addMessages(parsedData))
                     }
                 }
             }

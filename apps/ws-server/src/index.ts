@@ -5,6 +5,7 @@ const wss = new WebSocketServer({ port: 8080 });
 
 
 
+
 interface roomDetails {
     socket: WebSocket,
     userId: number,
@@ -26,6 +27,7 @@ let store: Map<string, store> = new Map();
 
 wss.on('connection', async function connection(socket, req) {
     socket.on('error', console.error);
+    socket.on('error', console.error);
     if (!req.url) return
     const urlParams = new URLSearchParams(req.url.split('?')[1]);
     const token = urlParams.get('token');
@@ -35,9 +37,29 @@ wss.on('connection', async function connection(socket, req) {
 
 
     socket.on('message', function message(data) {
+        const parsedData: parsedData = JSON.parse(data as unknown as string);
 
-        if (roomDetails) {
-            addtoroom(socket, roomDetails, store)
+        if (!parsedData) {
+            const errorData = { type: 'error', message: 'null message recived' }
+            socket.send(JSON.stringify(errorData));
+        };
+
+        if (parsedData.type === 'chat') {
+            const members = store.get(parsedData.roomcode);
+            const sockets = members?.sockets;
+
+            sockets?.map((item: roomDetails) => {
+                item.socket.send(JSON.stringify(parsedData))
+            })
+        }
+        if (parsedData.type === 'rect' || 'circle') {
+            const storeData = store.get(parsedData.roomcode);
+            const sockets = storeData?.sockets;
+            const allShapes = storeData?.shapes
+
+            sockets?.map((item: roomDetails) => {
+                item.socket.send(JSON.stringify(allShapes))
+            })
         }
     });
 })

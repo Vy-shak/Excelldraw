@@ -59,6 +59,12 @@ const validationCheck = async (roomcode: string | null, token: string | null, ws
         return null
     };
     const { roomname, roomCode } = roomexist;
+    if (!roomCode && !roomname) {
+        const errMsg = { type: 'error', message: 'unable to verify your profile please login again' }
+        socket.send(JSON.stringify(errMsg));
+
+    }
+
     return { userId, roomCode, roomname }
 };
 
@@ -72,12 +78,16 @@ const addtoroom = (socket: WebSocket, roomDetails: parseValidation, store: Map<s
             shapes: [],
             chats: []
         };
-
-        store.set(roomCode, value)
+        store.set(roomCode, value);
     }
     else {
         store.get(roomCode)!.sockets.push(roomData)
-    }
+    };
+
+    const members = store.get(roomCode)
+    const roomSuccess = { type: 'join', roomcode: roomCode, roomname: roomname, members: members?.sockets };
+
+
 }
 
 export { validationCheck, addtoroom }
