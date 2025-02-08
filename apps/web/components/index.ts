@@ -8,6 +8,7 @@ import Messagebox from "./canvas/Messagebox";
 import Sidemenu from "./dashboard/Sidemenu";
 import Sidebar from "./dashboard/Sidebar";
 import Navbar from "./dashboard/Navbar";
+import Loading from "./dashboard/Loading";
 
 
-export { Button, Navbar, Sidemenu, Sidebar, Messagebox, Chatbox, Input, SpaceCard, Toolbox, Topbar }
+export { Button, Navbar, Sidemenu, Loading, Sidebar, Messagebox, Chatbox, Input, SpaceCard, Toolbox, Topbar }

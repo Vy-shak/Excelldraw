@@ -3,6 +3,8 @@ import React, { useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Input, Button } from '../../../components';
 import axios from 'axios';
+import { Sideimg3, Sideimg4 } from '../../../public';
+import Image from 'next/image';
 
 function Signup() {
     const [isSignup, setSignup] = useState(false);
@@ -42,24 +44,34 @@ function Signup() {
     }
 
     return (
-        <div className='w-full pt-5 px-20'>
-            <div className="flex w-full flex-col space-y-4 px-6 h-fit rounded-lg bg-white py-4">
-                <div className="w-full">
-                    <h5 className="text-lg text-neutral-800 font-bold">
-                        <span>Get Started with ChalkSync</span><br />
-                        <span> Sign Up Now!</span>
-                    </h5>
-                </div>
-                <div className="flex justify-center space-y-3 flex-col items-center">
-                    <Input varient='normal' place='eg: yshak' Size='normal' reference={nameRef} type='text' title='Name' />
-                    <Input varient='normal' place='eg: Vyshakn29@gmail.com' Size='normal' reference={emailRef} type='text' title='Email' />
-                    <Input varient='normal' place='eg: 12345@gmail.com' Size='normal' reference={passwordRef} type='password' title='Password' />
-                    <Input varient='normal' place='eg: 12345@gmail.com' Size='normal' reference={confirmpassRef} type='password' title='Confirm password' />
-                </div>
-                <div className="w-full px-24 mt-4">
-                    <div onClick={handleSignup} className='w-fit h-fit'>
-                        <Button variant="primary" text="Signup" size="default" />
+        <div className='w-screen flex justify-between items-center pt-5 px-20'>
+            <div className='w-1/2 px-8'>
+                <div className="flex w-full flex-col space-y-4 px-6 h-fit rounded-lg bg-white py-4">
+                    <div className="w-full">
+                        <h5 className="text-lg text-neutral-800 font-bold">
+                            <span>Get Started with ChalkSync</span><br />
+                            <span> Sign Up Now!</span>
+                        </h5>
                     </div>
+                    <div className="flex justify-center space-y-3 flex-col items-center">
+                        <Input varient='normal' place='eg: yshak' Size='normal' reference={nameRef} type='text' title='Name' />
+                        <Input varient='normal' place='eg: Vyshakn29@gmail.com' Size='normal' reference={emailRef} type='text' title='Email' />
+                        <Input varient='normal' place='eg: 12345@gmail.com' Size='normal' reference={passwordRef} type='password' title='Password' />
+                        <Input varient='normal' place='eg: 12345@gmail.com' Size='normal' reference={confirmpassRef} type='password' title='Confirm password' />
+                    </div>
+                    <div className="w-full px-24 mt-4">
+                        <div onClick={handleSignup} className='w-fit h-fit'>
+                            <Button variant="primary" text="Signup" size="default" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div className='w-1/2 px-5 flexCenter flex-col'>
+                <div className='w-full space-x-2  flex justify-between'>
+                    <Image className='w-full ' alt='sideimage' src={Sideimg4} />
+                </div>
+                <div className='w-full'>
+                    <Image className='' alt='sideimage' src={Sideimg3} />
                 </div>
             </div>
         </div>

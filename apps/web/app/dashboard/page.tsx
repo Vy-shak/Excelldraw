@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import axios from 'axios'
 import { useRef } from 'react'
-import { SpaceCard, Sidebar, Navbar } from '../../components'
+import { SpaceCard, Sidebar, Navbar, Loading } from '../../components'
 import { Plus, UserPlus, Loader, } from "lucide-react"
 import { useRouter } from 'next/navigation'
 import { AppDispatch } from '../../lib/store/store'
@@ -36,8 +36,8 @@ function Home() {
                 });
                 const { code, roomName } = data
                 if (code && roomName) {
+                    await router.push(`/${data.code}`);
                     setLoader(false);
-                    router.push(`/${data.code}`)
                 }
             }
 
@@ -49,13 +49,15 @@ function Home() {
     const joinRoom = async () => {
         const roomcode = joinNameref.current?.value;
         if (roomcode) {
-            router.push(`/${roomcode}`)
+            router.push(`/${roomcode}`);
+            setLoader(false);
         }
     }
 
 
     return (
         <div className='flex justify-start items-start gap-x-6 w-full h-screen'>
+            {loader && <Loading />}
             <Navbar />
             <Sidebar />
             <div className='w-full h-full gap-y-4 pt-12 flex justify-start items-start flex-col'>

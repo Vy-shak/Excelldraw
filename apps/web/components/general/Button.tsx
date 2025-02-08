@@ -12,7 +12,7 @@ interface buttonProps {
 
 const constants = {
     variant: {
-        primary: ' hover:bg-primaryGreen-600  bg-primaryGreen-500 text-neutral-900  font-normal  ',
+        primary: ' hover:bg-primaryGreen-600  bg-primaryGreen-500 text-neutral-900  font-medium  ',
         secondary: 'border-2 rounded-md bg-primaryGreen-100 hover:bg-primaryGreen-200 text-xs border-primaryGreen-500  text-neutral-700 font-medium',
     },
     size: {

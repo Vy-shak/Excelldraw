@@ -63,7 +63,7 @@ function Chatbox({ socket, url, username, roomcode }: chatbox) {
                         </div>
                         <div className='flexCenter pr-4 w-fit h-fit'>
                             <Input varient='normal' place='Type a message' type='text' Size='normal' reference={MessageRef} />
-                            <div onClick={sendMessage} className='w-fit h-fit p-2 bg-green-400 rounded'>
+                            <div onClick={sendMessage} className='w-fit h-fit p-2 bg-primaryGreen-600 rounded'>
                                 <Send color='white' />
                             </div>
                         </div>
