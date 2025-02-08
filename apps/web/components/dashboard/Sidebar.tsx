@@ -21,7 +21,7 @@ const SidebarData = [{
 
 const Sidebar = () => {
     return (
-        <div className='w-36 pt-16 absolute space-y-2 py-2 top-0 left-0 h-full justify-start items-center flex flex-col bg-white'>
+        <div className='w-48 pt-20  gap-y-2 px-2  top-0 h-full justify-start items-center flex flex-col bg-white'>
             {SidebarData.map((item) => (
                 <Navmenu key={item.id} Icon={item.icon} text={item.text} />
             ))}

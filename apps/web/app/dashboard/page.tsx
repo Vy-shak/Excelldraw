@@ -55,15 +55,18 @@ function Home() {
 
 
     return (
-        <div className='flex justify-start items-center pt-6 space-y-6 flex-col w-full h-screen'>
+        <div className='flex justify-start items-start gap-x-6 w-full h-screen'>
             <Navbar />
             <Sidebar />
-            <div className='w-full flexCenter'>
-                <Profilecard />
-            </div>
-            <div className='flexCenter w-fit h-fit space-x-3'>
-                <SpaceCard icon={loader ? <Loader /> : <Plus />} handleClick={createRoom} type='Create space' refer={createNameref} />
-                <SpaceCard icon={loader ? <Loader /> : <UserPlus />} handleClick={joinRoom} type='Join space' refer={joinNameref} />
+            <div className='w-full h-full gap-y-4 pt-12 flex justify-start items-start flex-col'>
+                <h1 className='text-2xl font-bold text-neutral-800'><span>Welcome</span><br /><span>back champ!</span></h1>
+                <div className='w-full border-b-2 border-neutral-100 pb-4 flex justify-start items-center'>
+                    <Profilecard />
+                </div>
+                <div className='flexCenter w-full h-fit pr-6 gap-x-6'>
+                    <SpaceCard icon={loader ? <Loader /> : <Plus />} handleClick={createRoom} type='Create space' refer={createNameref} />
+                    <SpaceCard icon={loader ? <Loader /> : <UserPlus />} handleClick={joinRoom} type='Join space' refer={joinNameref} />
+                </div>
             </div>
         </div >
     )

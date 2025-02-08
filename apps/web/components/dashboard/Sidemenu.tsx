@@ -9,9 +9,9 @@ interface navmenu {
 
 const Sidemenu = ({ Icon, text }: navmenu) => {
     return (
-        <div className='w-full pl-3 space-x-3 flex justify-normal items-center h-8 bg-green-400'>
+        <div className='w-full pl-3 rounded-md gap-x-3 flex justify-normal items-center h-8 bg-primaryGreen-500'>
             {Icon}
-            <span className='text-sm font-medium'>{text}</span>
+            <span className=' text-neutral-900 text-xs font-medium'>{text}</span>
         </div>
     )
 }

@@ -36,18 +36,19 @@ function Profilecard() {
         })()
     }, []);
     return (
-        <div className='w-full max-w-lg  bg-white rounded-md flex justify-between items-center'>
-            <div>
-                <div className='overflow-hidden rounded-xl'>
-                    {userData && <Image alt='userProfile' width={100} height={100} src={userData.imgUrl} />}
+        <div className='w-full max-w-lg  bg-white rounded-lg flex justify-between px-4 py-6 border-neutral-600 items-center'>
+            <div className='flex space-x-2 justify-center items-start'>
+                <div className='overflow-hidden flexCenter rounded-md'>
+                    {userData && <Image alt='userProfile' width={80} height={80} src={userData.imgUrl} />}
                 </div>
                 <div className='flex justify-start items-start flex-col'>
-                    {userData && <span>{userData.name}</span>}
+                    {userData && <span className='text-lg text-neutral-600 font-semibold'>{userData.name}</span>}
+                    <span className='text-[12px] font-medium text-neutral-800'>Plan: Workspace basic</span>
                 </div>
             </div>
             <div className='flexCenter flex-col w-fit h-fit'>
                 <Button size='default' text='Edit profile' variant='secondary' />
-                <span className='text-xs'>view plan details</span>
+                <span className='text-[14px] font-medium text-blue-600 '>View plan Details</span>
             </div>
         </div>
     )
