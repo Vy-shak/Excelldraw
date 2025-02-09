@@ -9,6 +9,7 @@ import { useAppSelector, useAppDispatch } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import useChatsStore from '../../lib/stateStore/messageStore';
+import useToolstore from '../../lib/stateStore/toolStore';
 import { addUserdata } from '../../lib/store/user/userdataSlice';
 import { addMessages } from '../../lib/store/chat/messageSlice';
 
@@ -24,12 +25,12 @@ interface userData {
 }
 
 function page() {
-    const updateChats = useChatsStore((state) => state.updateChats)
-    const selectedTool = useAppSelector((state) => state.tool);
+    const updateChats = useChatsStore((state) => state.updateChats);
+    const selectedTool = useToolstore((state) => state.tool);
+
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const params = useParams<{ slug: string }>();
     const socketRef = useRef<WebSocket | null>(null)
-    const dispatch = useAppDispatch();
     const [userData, setUserdata] = useState<userData>()
     const [roomData, setroomData] = useState()
     const [socketOn, setOnsocket] = useState(false);
