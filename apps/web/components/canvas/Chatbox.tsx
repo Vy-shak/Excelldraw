@@ -3,8 +3,9 @@
 import React, { useState } from 'react'
 import Input from '../general/Input'
 import { useRef } from 'react'
-import { Send, ChevronRight, MessageSquare } from "lucide-react"
+import { Send, ChevronRight, MessageSquare, Store } from "lucide-react"
 import Messagebox from './Messagebox'
+import useChatsStore from '../../lib/stateStore/messageStore'
 import { useAppSelector } from '../../lib/store/hook'
 
 interface chatbox {
@@ -15,13 +16,13 @@ interface chatbox {
 }
 
 function Chatbox({ socket, url, username, roomcode }: chatbox) {
+    const chats = useChatsStore((state) => state.chats)
     console.log("roomcode:-", roomcode)
-    const chats = useAppSelector((state) => state.message)
     const MessageRef = useRef<HTMLInputElement>(null);
     console.log('got the socket in chat', socket)
     const [isChat, setIschat] = useState(false);
 
-    console.log("alldata", chats)
+    console.log("allchats", chats)
 
     const openChatbox = () => {
         setIschat(true)
