@@ -5,13 +5,10 @@ import { useRef, useEffect } from 'react'
 import startDraw from '../draw/Index';
 import { Socketmsg } from '../draw/Index';
 import { Toolbox, Topbar, Chatbox } from '../../components';
-import { useAppSelector, useAppDispatch } from '../../lib/store/hook';
 import { useParams } from 'next/navigation';
 import axios from 'axios';
 import useChatsStore from '../../lib/stateStore/messageStore';
 import useToolstore from '../../lib/stateStore/toolStore';
-import { addUserdata } from '../../lib/store/user/userdataSlice';
-import { addMessages } from '../../lib/store/chat/messageSlice';
 
 
 interface userData {

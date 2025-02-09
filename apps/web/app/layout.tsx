@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import "@repo/ui/styles.css";
-import StoreProvider from "./StoreProvider";
 import { Montserrat } from "next/font/google";
 
 
@@ -25,9 +24,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${montserrat.className}`} style={{ backgroundColor: "#F0F1F1" }} >
-        <StoreProvider>
-          {children}
-        </StoreProvider>
+        {children}
       </body>
     </html>
   );

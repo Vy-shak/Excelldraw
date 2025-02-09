@@ -6,7 +6,6 @@ import { useRef } from 'react'
 import { Send, ChevronRight, MessageSquare, Store } from "lucide-react"
 import Messagebox from './Messagebox'
 import useChatsStore from '../../lib/stateStore/messageStore'
-import { useAppSelector } from '../../lib/store/hook'
 
 interface chatbox {
     socket: WebSocket,
