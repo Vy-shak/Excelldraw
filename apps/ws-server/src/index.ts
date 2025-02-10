@@ -36,8 +36,12 @@ type chats = {
     url: string,
     roomcode: string
 }
+type clearShape = {
+    type: "clearAll",
+    roomcode: string
+}
 
-type parsedData = shapes | chats
+type parsedData = shapes | chats | clearShape
 
 
 export interface roomDetails {
@@ -93,6 +97,18 @@ wss.on('connection', async function connection(socket, req) {
             const allMessages = store.get(parsedData.roomcode)?.chats
             sockets?.map((item: roomDetails) => {
                 item.socket.send(JSON.stringify({ type: 'chat', chats: allMessages }))
+            })
+        }
+        if (parsedData.type === 'clearAll') {
+            const storeData = store.get(parsedData.roomcode);
+            const length = storeData?.shapes.length
+            const sockets = storeData?.sockets;
+            store.get(parsedData.roomcode)?.shapes.splice(0, length);
+
+            const allShapes = store.get(parsedData.roomcode)?.shapes;
+            console.log(allShapes);
+            sockets?.map((item: roomDetails) => {
+                item.socket.send(JSON.stringify({ type: 'shape', shapes: allShapes }))
             })
         }
         if (parsedData.type === 'rect' || parsedData.type === 'circle' || parsedData.type === 'pencil') {

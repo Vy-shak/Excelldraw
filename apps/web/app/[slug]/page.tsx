@@ -78,11 +78,9 @@ function page() {
                         setroomData({ roomcode, roomname })
                     }
                     else if (parsedData.type === 'shape') {
-                        console.log('calling socket')
                         Socketmsg(canvasRef.current!, parsedData.shapes)
                     }
                     else if (parsedData.type === 'chat') {
-                        console.log("the chatts")
                         updateChats(parsedData.chats)
                     }
                 }
@@ -111,7 +109,7 @@ function page() {
             <Topbar details={roomData} />
             {socketOn && socketRef.current && userData && <Chatbox username={userData.name} url={userData?.imgUrl} socket={socketRef.current} roomcode={slug} />}
             <canvas ref={canvasRef} width={window.innerWidth} height={window.innerHeight}></canvas>
-            {<Toolbox />}
+            {socketOn && socketRef.current && <Toolbox socket={socketRef.current} roomcode={slug} />}
         </div>
     )
 }

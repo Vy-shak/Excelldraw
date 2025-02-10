@@ -1,7 +1,7 @@
 
 import { create } from "zustand";
 
-type tools = "rect" | "circle" | "text" | "pencil"
+type tools = "rect" | "circle" | "text" | "pencil" | "clearAll"
 
 interface store {
     tool: tools

@@ -134,7 +134,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             ctx.fillStyle = "black";
             if (e.key === 'Backspace') {
                 text = text.slice(0, -1);
-                ctx.fillText(text + '|', startX, startY);
+                ctx.fillText(text + " " + '|', startX, startY);
             }
             if (/^[a-zA-Z0-9]$/.test(e.key)) {
                 text = text + e.key
