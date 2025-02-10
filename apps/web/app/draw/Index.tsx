@@ -1,5 +1,11 @@
 import Roomcode from "../../components/canvas/Roomcode";
 
+
+interface pencilPoints {
+    endX: number, endY: number
+}
+
+
 type storeT = {
     type: 'rect',
     startX: number,
@@ -20,8 +26,8 @@ type storeT = {
     type: 'pencil',
     startX: number,
     startY: number,
-    clientX: number,
-    clientY: number,
+    endPoints: pencilPoints[],
+    roomcode: string
 }
 
 let globalshapes: any[] = [];
@@ -29,13 +35,7 @@ let globalPencil: any[] = [];
 
 
 function renderpencil(ctx: CanvasRenderingContext2D) {
-    if (globalPencil) {
-        globalPencil.map((item) => {
-            if (item.shape === 'pencil') {
-                ctx.fillRect(item.startX, item.startY, 5, 5)
-            }
-        })
-    }
+
 };
 
 
@@ -57,11 +57,25 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
             ctx!.beginPath();
             ctx!.arc(startX, startY, radius, 0, 6.283);
             ctx!.stroke();
+            ctx!.closePath();
         }
         if (item.type === 'text') {
             ctx!.font = "16px Arial";
             ctx!.fillStyle = "black";
             ctx!.fillText(text, startX, startY);
+        };
+
+        if (item.type === 'pencil') {
+            ctx!.strokeStyle = 'black';
+            console.log("the itemspencil", item)
+            ctx!.beginPath();
+            ctx!.moveTo(item.startX, item.startY);
+            item.endPoints.map((val) => {
+                console.log(val.endX, val.endY)
+                ctx!.lineTo(val.endX, val.endY)
+            })
+            ctx?.stroke()
+            ctx!.closePath()
         }
     })
 }
@@ -91,12 +105,23 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
                     ctx!.beginPath();
                     ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
                     ctx!.stroke();
+                    ctx!.closePath();
                 }
                 if (item.type === 'text') {
                     ctx!.font = "16px Arial";
                     ctx!.fillStyle = "black";
                     ctx!.fillText(item.text, item.startX, item.startY);
                 }
+                // if (item.type === 'pencil') {
+                //     ctx.beginPath();
+                //     ctx.moveTo(item.startX, item.endPoints);
+                //     if (item.endPoints) {
+                //         item.endPoints.map((item) => {
+                //             ctx.lineTo(item.endX, item.endY)
+                //         })
+                //     };
+                //     ctx.closePath()
+                // }
             })
         }
     };
@@ -130,16 +155,17 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
         startX = e.clientX;
         startY = e.clientY;
         if (selectedTool === 'pencil') {
+            ctx.closePath();
             ctx.beginPath();
             ctx.moveTo(startX, startY);
         }
         if (text) {
             text = '';
         }
-        if (selectedTool === 'clearAll') {
-            const clearAll = { type: 'clearAll' }
-            socket.send(JSON.stringify(clearAll))
-        }
+        // if (selectedTool === 'clearAll') {
+        //     const clearAll = { type: 'clearAll' }
+        //     socket.send(JSON.stringify(clearAll))
+        // }
         ctx!.strokeStyle = 'black';
     };
 
@@ -152,7 +178,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             ctx!.lineJoin = 'round';
             ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-            renderAll(ctx)
+            // renderAll(ctx)
             renderpencil(ctx)
 
             if (selectedTool === 'rect') {
@@ -166,6 +192,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             }
             if (selectedTool === 'pencil') {
                 ctx.lineTo(e.clientX, e.clientY);
+                globalPencil.push({ endX: e.clientX, endY: e.clientY })
                 ctx.stroke();
             }
             else if (selectedTool === 'eraser') {
@@ -195,7 +222,10 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             socket.send(JSON.stringify(shapeData));
         }
         if (selectedTool === 'pencil') {
-            ctx.closePath()
+            ctx.closePath();
+            const details = { type: 'pencil', startX: startX, startY: startY, endPoints: globalPencil, roomcode: roomcode }
+            socket.send(JSON.stringify(details))
+            globalPencil = [];
         }
 
         if (selectedTool === 'text') {

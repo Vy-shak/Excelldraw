@@ -3,6 +3,9 @@ import { validationCheck, addtoroom } from "./actions";
 
 const wss = new WebSocketServer({ port: 8080 });
 
+interface pencilPoints {
+    x: number, y: number
+}
 
 type shapes = {
     type: 'rect',
@@ -17,7 +20,14 @@ type shapes = {
     startY: number,
     radius: number,
     roomcode: string
+} | {
+    type: 'pencil',
+    startX: number,
+    startY: number,
+    endPoints: pencilPoints[],
+    roomcode: string
 }
+
 
 type chats = {
     type: 'chat',
@@ -85,7 +95,7 @@ wss.on('connection', async function connection(socket, req) {
                 item.socket.send(JSON.stringify({ type: 'chat', chats: allMessages }))
             })
         }
-        if (parsedData.type === 'rect' || parsedData.type === 'circle') {
+        if (parsedData.type === 'rect' || parsedData.type === 'circle' || parsedData.type === 'pencil') {
             const storeData = store.get(parsedData.roomcode);
             const sockets = storeData?.sockets;
             store.get(parsedData.roomcode)?.shapes.push(parsedData);
