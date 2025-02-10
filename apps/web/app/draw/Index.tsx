@@ -165,8 +165,8 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
                 ctx!.stroke();
             }
             if (selectedTool === 'pencil') {
-                ctx!.fillRect(e.clientX, e.clientY, 5, 5);
-                globalPencil.push({ shape: 'pencil', startX: e.clientX, startY: e.clientY, width: 5, height: 5 })
+                ctx.lineTo(e.clientX, e.clientY);
+                ctx.stroke();
             }
             else if (selectedTool === 'eraser') {
                 ctx!.fillStyle = 'black';
@@ -190,8 +190,12 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
 
         if (selectedTool === 'circle') {
             // store.push({ shape: 'circle', startX, startY, radius });
+            ctx.closePath()
             const shapeData = { type: 'circle', startX, startY, radius, roomcode: roomcode }
             socket.send(JSON.stringify(shapeData));
+        }
+        if (selectedTool === 'pencil') {
+            ctx.closePath()
         }
 
         if (selectedTool === 'text') {
