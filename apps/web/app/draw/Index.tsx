@@ -1,23 +1,23 @@
 import Roomcode from "../../components/canvas/Roomcode";
 
 type storeT = {
-    shape: 'rect',
+    type: 'rect',
     startX: number,
     startY: number,
     width: number,
     height: number
 } | {
-    shape: 'circle',
+    type: 'circle',
     startX: number,
     startY: number,
     radius: number,
 } | {
-    shape: 'text',
+    type: 'text',
     startX: number,
     startY: number,
     text: string,
 } | {
-    shape: 'pencil',
+    type: 'pencil',
     startX: number,
     startY: number,
     clientX: number,
@@ -27,28 +27,6 @@ type storeT = {
 let globalshapes: any[] = [];
 let globalPencil: any[] = [];
 
-function renderAll(ctx: CanvasRenderingContext2D) {
-    if (globalshapes) {
-        globalshapes.map((item) => {
-            if (item.shape === 'rect') {
-                ctx!.strokeStyle = 'black';
-                ctx!.setLineDash([5, 3]);
-                ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
-            }
-            if (item.shape === 'circle') {
-                ctx!.strokeStyle = 'black';
-                ctx!.beginPath();
-                ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
-                ctx!.stroke();
-            }
-            if (item.shape === 'text') {
-                ctx!.font = "16px Arial";
-                ctx!.fillStyle = "black";
-                ctx!.fillText(item.text, item.startX, item.startY);
-            }
-        })
-    }
-};
 
 function renderpencil(ctx: CanvasRenderingContext2D) {
     if (globalPencil) {
@@ -68,7 +46,7 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
     console.log("allshapes", shapes)
     globalshapes = shapes;
     shapes.map((item) => {
-        const { shape, startX, startY, width, height, radius, text } = item
+        const { type, startX, startY, width, height, radius, text }: storeT = item
         if (item.type === 'rect') {
             ctx!.strokeStyle = 'black';
             ctx!.setLineDash([5, 3]);
@@ -80,7 +58,7 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
             ctx!.arc(startX, startY, radius, 0, 6.283);
             ctx!.stroke();
         }
-        if (shape === 'text') {
+        if (item.type === 'text') {
             ctx!.font = "16px Arial";
             ctx!.fillStyle = "black";
             ctx!.fillText(text, startX, startY);
@@ -98,6 +76,30 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     let startX = 5;
     let startY = 5;
     let text = '';
+
+    function renderAll(ctx: CanvasRenderingContext2D) {
+        console.log("rendering", globalshapes)
+        if (globalshapes) {
+            globalshapes.map((item) => {
+                if (item.type === 'rect') {
+                    ctx!.strokeStyle = 'black';
+                    ctx!.setLineDash([5, 3]);
+                    ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
+                }
+                if (item.type === 'circle') {
+                    ctx!.strokeStyle = 'black';
+                    ctx!.beginPath();
+                    ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
+                    ctx!.stroke();
+                }
+                if (item.type === 'text') {
+                    ctx!.font = "16px Arial";
+                    ctx!.fillStyle = "black";
+                    ctx!.fillText(item.text, item.startX, item.startY);
+                }
+            })
+        }
+    };
 
     const handleText = (e: KeyboardEvent) => {
         if (selectedTool === 'text') {

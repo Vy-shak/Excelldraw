@@ -6,10 +6,7 @@ import { useRef } from 'react'
 import { SpaceCard, Sidebar, Navbar, Loading } from '../../components'
 import { Plus, UserPlus, Loader, } from "lucide-react"
 import { useRouter } from 'next/navigation'
-import { AppDispatch } from '../../lib/store/store'
-import { useAppDispatch } from '../../lib/store/hook'
 import Profilecard from '../../components/dashboard/Profilecard'
-import { addUserdata } from '../../lib/store/user/userdataSlice'
 
 
 
@@ -18,7 +15,6 @@ function Home() {
     const router = useRouter()
     const createNameref = useRef<HTMLInputElement>(null)
     const joinNameref = useRef<HTMLInputElement>(null)
-    const dispatch = useAppDispatch()
     console.log('hello', createNameref.current?.value)
 
     const token = localStorage.getItem("token")
