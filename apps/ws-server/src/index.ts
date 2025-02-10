@@ -26,6 +26,12 @@ type shapes = {
     startY: number,
     endPoints: pencilPoints[],
     roomcode: string
+} | {
+    type: 'text',
+    text: string
+    startX: number,
+    startY: number,
+    roomcode: string
 }
 
 
@@ -111,7 +117,8 @@ wss.on('connection', async function connection(socket, req) {
                 item.socket.send(JSON.stringify({ type: 'shape', shapes: allShapes }))
             })
         }
-        if (parsedData.type === 'rect' || parsedData.type === 'circle' || parsedData.type === 'pencil') {
+        if (parsedData.type === 'rect' || parsedData.type === 'circle' || parsedData.type === 'pencil' || parsedData.type === 'text') {
+            console.log(parsedData)
             const storeData = store.get(parsedData.roomcode);
             const sockets = storeData?.sockets;
             store.get(parsedData.roomcode)?.shapes.push(parsedData);

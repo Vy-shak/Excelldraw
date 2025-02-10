@@ -131,13 +131,18 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
 
     const handleText = (e: KeyboardEvent) => {
         if (selectedTool === 'text') {
+            console.log(e)
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
             renderAll(ctx)
             ctx.font = "16px Arial";
             ctx.fillStyle = "black";
             if (e.key === 'Backspace') {
                 text = text.slice(0, -1);
-                ctx.fillText(text + " " + '|', startX, startY);
+                ctx.fillText(text + '|', startX, startY);
+            }
+            if (e.code === 'Space') {
+                text = text.slice(0, -1) + " "
+                ctx.fillText(text + '|', startX, startY);
             }
             if (/^[a-zA-Z0-9]$/.test(e.key)) {
                 text = text + e.key
@@ -147,7 +152,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
                 ctx.fillText(text + '|', startX, startY);
             }
             if (e.key === 'Enter') {
-                const details = { type: 'shape', shape: { shape: 'text', text: text, startX, startY } }
+                const details = { type: 'text', text: text, startX: startX, startY: startY, roomcode: roomcode }
                 socket.send(JSON.stringify(details));
             }
         }
@@ -165,10 +170,6 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
         if (text) {
             text = '';
         }
-        // if (selectedTool === 'clearAll') {
-        //     const clearAll = { type: 'clearAll' }
-        //     socket.send(JSON.stringify(clearAll))
-        // }
         ctx!.strokeStyle = 'black';
     };
 
