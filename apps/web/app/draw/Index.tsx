@@ -45,6 +45,9 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
     let ctx = canvas.getContext("2d");
     console.log("allshapes", shapes)
     globalshapes = shapes;
+    if (shapes.length < 1) {
+        ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    }
     shapes.map((item) => {
         const { type, startX, startY, width, height, radius, text }: storeT = item
         if (item.type === 'rect') {
