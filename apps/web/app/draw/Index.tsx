@@ -94,46 +94,12 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
     let startY = 5;
     let text = '';
 
-    function renderAll(ctx: CanvasRenderingContext2D) {
-        console.log("rendering", globalshapes)
-        if (globalshapes) {
-            globalshapes.map((item) => {
-                if (item.type === 'rect') {
-                    ctx!.strokeStyle = 'black';
-                    ctx!.setLineDash([5, 3]);
-                    ctx!.strokeRect(item.startX, item.startY, item.width, item.height);
-                }
-                if (item.type === 'circle') {
-                    ctx!.strokeStyle = 'black';
-                    ctx!.beginPath();
-                    ctx!.arc(item.startX, item.startY, item.radius, 0, 6.283);
-                    ctx!.stroke();
-                    ctx!.closePath();
-                }
-                if (item.type === 'text') {
-                    ctx!.font = "16px Arial";
-                    ctx!.fillStyle = "black";
-                    ctx!.fillText(item.text, item.startX, item.startY);
-                }
-                // if (item.type === 'pencil') {
-                //     ctx.beginPath();
-                //     ctx.moveTo(item.startX, item.endPoints);
-                //     if (item.endPoints) {
-                //         item.endPoints.map((item) => {
-                //             ctx.lineTo(item.endX, item.endY)
-                //         })
-                //     };
-                //     ctx.closePath()
-                // }
-            })
-        }
-    };
 
     const handleText = (e: KeyboardEvent) => {
         if (selectedTool === 'text') {
             console.log(e)
             ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-            renderAll(ctx)
+            Socketmsg(canvas, globalshapes)
             ctx.font = "16px Arial";
             ctx.fillStyle = "black";
             if (e.key === 'Backspace') {
@@ -182,7 +148,6 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             ctx!.lineJoin = 'round';
             ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
 
-            // renderAll(ctx)
             renderpencil(ctx)
 
             if (selectedTool === 'rect') {
