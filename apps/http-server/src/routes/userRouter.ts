@@ -50,6 +50,7 @@ userRouter.post('/signup', (req: Request, res: Response) => {
                 data: {
                     email: email,
                     name: name,
+                    imgUrl: "https://ppppwffeiuaabvrukckb.supabase.co/storage/v1/object/public/appAvatars/Avatar2.svg",
                     password: hashedPass
                 }
 

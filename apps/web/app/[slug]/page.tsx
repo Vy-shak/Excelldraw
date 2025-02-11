@@ -9,6 +9,7 @@ import { useParams } from 'next/navigation';
 import axios from 'axios';
 import useChatsStore from '../../lib/stateStore/messageStore';
 import useToolstore from '../../lib/stateStore/toolStore';
+import useRoomdata from '../../lib/stateStore/userStore';
 
 
 interface userData {
@@ -24,7 +25,7 @@ interface userData {
 function page() {
     const updateChats = useChatsStore((state) => state.updateChats);
     const selectedTool = useToolstore((state) => state.tool);
-
+    const updateRoomdata = useRoomdata((state) => state.updateRoomdata)
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const params = useParams<{ slug: string }>();
     const socketRef = useRef<WebSocket | null>(null)
@@ -74,8 +75,8 @@ function page() {
                     console.log("yppdd:-", parsedData)
 
                     if (parsedData.type === 'join') {
-                        const { roomcode, roomname } = parsedData
-                        setroomData({ roomcode, roomname })
+                        const { roomcode, roomname, members } = parsedData
+                        updateRoomdata(parsedData)
                     }
                     else if (parsedData.type === 'shape') {
                         Socketmsg(canvasRef.current!, parsedData.shapes)

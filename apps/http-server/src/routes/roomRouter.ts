@@ -10,8 +10,8 @@ const roomRouter: Router = Router();
 roomRouter.post('/create', authmiddleware, async (req, res) => {
     const { roomname } = req.body;
     const id = req.id;
-    console.log(id)
-    console.log(typeof id);
+    console.log("the id", id);
+    console.log("the roomname", roomname);
 
 
     try {

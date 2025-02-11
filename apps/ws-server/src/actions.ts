@@ -7,7 +7,7 @@ import { store, roomDetails } from ".";
 
 
 interface parseValidation {
-    userId: number, roomCode: string, roomname: string
+    userId: number, roomCode: string, roomname: string, name: string, imgUrl: string
 }
 
 const validationCheck = async (roomcode: string | null, token: string | null, wss: WebSocketServer, socket: WebSocket) => {
@@ -45,6 +45,21 @@ const validationCheck = async (roomcode: string | null, token: string | null, ws
         wss.close();
         return null
     };
+
+    const userdetails = await prisma.user.findFirst({
+        where: {
+            id: userId
+        }
+    })
+
+    if (!userdetails) {
+        const errMsg = { type: 'error', message: 'unable to get your userDetails please try again' }
+        socket.send(JSON.stringify(errMsg));
+        return
+    }
+
+    const { name, imgUrl } = userdetails
+
     const { roomname, roomCode } = roomexist;
     if (!roomCode && !roomname) {
         const errMsg = { type: 'error', message: 'unable to verify your profile please login again' }
@@ -52,13 +67,14 @@ const validationCheck = async (roomcode: string | null, token: string | null, ws
 
     }
 
-    return { userId, roomCode, roomname }
+    return { userId, roomCode, roomname, name, imgUrl }
 };
 
 
 const addtoroom = (socket: WebSocket, roomDetails: parseValidation, store: Map<string, store>) => {
-    const { userId, roomCode, roomname } = roomDetails
-    const roomData: roomDetails = { socket: socket, userId: userId, roomname: roomname };
+    const { userId, roomCode, roomname, name, imgUrl } = roomDetails
+    console.log(roomDetails)
+    const roomData: roomDetails = { socket: socket, userId: userId, roomname: roomname, username: name, profileUrl: imgUrl };
     if (!store.has(roomCode)) {
         const value: store = {
             sockets: [roomData],
