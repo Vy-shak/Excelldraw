@@ -5,8 +5,7 @@ import { Type, Pencil, MoveUpLeft, Square, Circle, Slash, Eraser, Trash2 } from 
 import useToolstore from '../lib/stateStore/toolStore';
 
 
-
-type tools = "rect" | "circle" | "text" | "pencil" | "clearAll";
+type Tools = "rect" | "circle" | "text" | "pencil" | "clearAll";
 
 interface toolbox {
     socket: WebSocket,
@@ -17,7 +16,7 @@ function Toolbox({ socket, roomcode }: toolbox) {
     const selectedTool = useToolstore((state) => state.tool);
     const updateTool = useToolstore((state) => state.updateTool);
 
-    const handleSelection = (tool: tools) => {
+    const handleSelection = (tool: Tools) => {
         updateTool(tool);
         if (tool === 'clearAll') {
             const details = { type: "clearAll", roomcode: roomcode }
