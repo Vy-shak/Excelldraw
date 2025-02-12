@@ -1,9 +1,9 @@
 import React from 'react'
 import { Pricing, Footer, Navbar, Hero, Video, Product, } from './landingSections'
-
 function page() {
   return (
     <section className='w-full'>
+      <Navbar />
       <section>
         <Hero />
       </section>
@@ -19,7 +19,7 @@ function page() {
       <section>
         <Footer />
       </section>
-    </section>
+    </section >
   )
 }
 

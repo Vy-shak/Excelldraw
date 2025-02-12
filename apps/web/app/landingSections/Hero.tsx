@@ -2,6 +2,7 @@ import React from 'react'
 import { TickIcon } from '../../public'
 import Image from 'next/image';
 import { Button } from '../../components';
+import { Tag, UserPlus } from "lucide-react"
 
 const Types = [
     { id: 1, text: "Startups" },
@@ -11,7 +12,7 @@ const Types = [
 
 function Hero() {
     return (
-        <section className='w-full flexCenter flex-col gap-y-6'>
+        <section className='w-full pt-14 flexCenter flex-col gap-y-6'>
             <div className='w-full flexCenter flex-col gap-y-3'>
                 <h6 className='font-extrabold text-xl text-neutral-950'><span>Transform ideas,</span><br />Defy boundaries.</h6>
                 <div className='flexCenter w-full gap-x-4 h-full'>
@@ -23,9 +24,9 @@ function Hero() {
                     ))}
                 </div>
             </div>
-            <div className='w-full flexCenter gap-x-2'>
-                <Button text='Create account' size='default' variant='primary' />
-                <Button text='Be a guest' size='default' variant='secondary' />
+            <div className='w-full flex-col flexCenter gap-y-2'>
+                <Button startIcon={<UserPlus />} text='Create account' size='md' variant='primary' />
+                <Button startIcon={<Tag />} text='Be a guest' size='md' variant='secondary' />
             </div>
         </section>
     )

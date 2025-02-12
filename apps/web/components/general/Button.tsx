@@ -1,7 +1,7 @@
 "use client"
 interface buttonProps {
     variant: 'primary' | 'secondary',
-    size: 'default' | 'md',
+    size: 'default' | 'md' | 'xs',
     defaultCss?: string,
     text: string;
     startIcon?: React.ReactNode;
@@ -17,7 +17,8 @@ const constants = {
     },
     size: {
         default: 'xl:px-4 py-2  px-2  xl:py-2 text-xs xl:text-sm  w-fit lg:rounded-md rounded ',
-        md: 'xl:px-3 py-1  px-1  xl:py-1 text-xs xl:text-xs  w-fit lg:rounded-md rounded '
+        md: 'xl:px-3 py-2  px-2  xl:py-1 text-xs xl:text-xs  w-fit lg:rounded-md rounded',
+        xs: 'py-2 px-1 rounded'
     },
 }
 
