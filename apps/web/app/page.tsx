@@ -1,11 +1,25 @@
 import React from 'react'
+import { Pricing, Footer, Navbar, Hero, Video, Product, } from './landingSections'
 
 function page() {
   return (
-    <div className='flex flex-col'>
-      <span className='text-red-500'> hello world </span>
-      <span className='text-red-500'> hello world </span>
-    </div>
+    <section className='w-full'>
+      <section>
+        <Hero />
+      </section>
+      <section>
+        <Video />
+      </section>
+      <section>
+        <Product />
+      </section>
+      <section>
+        <Pricing />
+      </section>
+      <section>
+        <Footer />
+      </section>
+    </section>
   )
 }
 

@@ -5,8 +5,9 @@ import Sideimg4 from "./auth/SideImg4.png"
 import Star from "./auth/Star1.png"
 import Planet from "./auth/Planet2.png"
 import SavedIcon from "./icons/Library.svg"
+import TickIcon from "./icons/Tick.svg"
 
 
 
 
-export { Sideimg1, SavedIcon, Sideimg4, Sideimg2, Sideimg3, Star, Planet }
+export { Sideimg1, TickIcon, SavedIcon, Sideimg4, Sideimg2, Sideimg3, Star, Planet }
