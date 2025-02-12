@@ -73,7 +73,8 @@ const validationCheck = async (roomcode: string | null, token: string | null, ws
 
 const addtoroom = (socket: WebSocket, roomDetails: parseValidation, store: Map<string, store>) => {
     const { userId, roomCode, roomname, name, imgUrl } = roomDetails
-    console.log(roomDetails)
+    console.log(roomDetails);
+    let exist = false
     const roomData: roomDetails = { socket: socket, userId: userId, roomname: roomname, username: name, profileUrl: imgUrl };
     if (!store.has(roomCode)) {
         const value: store = {
@@ -84,7 +85,16 @@ const addtoroom = (socket: WebSocket, roomDetails: parseValidation, store: Map<s
         store.set(roomCode, value);
     }
     else {
-        store.get(roomCode)!.sockets.push(roomData)
+        store.get(roomCode)!.sockets.map((item) => {
+            if (item.userId === userId) {
+                exist = true
+                item = { userId: userId, roomname: roomCode, socket: socket, profileUrl: imgUrl }
+            }
+        });
+        if (!exist) {
+            const userDetails = { userId: userId, roomname: roomCode, socket: socket, profileUrl: imgUrl }
+            store.get(roomCode)?.sockets.push(userDetails)
+        }
     };
 
     const members = store.get(roomCode)
