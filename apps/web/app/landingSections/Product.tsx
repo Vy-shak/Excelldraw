@@ -4,7 +4,7 @@ import Image from 'next/image'
 function Product() {
     return (
         <div className='w-full pt-3 gap-y-3 flex-col  flexCenter'>
-            <span className='whitespace-nowrap font-bold text-md text-neutral-900'>The product</span>
+            <span className='whitespace-nowrap sm:text-lg lg:text-xl font-bold text-md text-neutral-900'>The product</span>
             <div className='w-full gap-2 flexCenter bg-white pt-2 px-2 rounded border-neutral-300 flex-col'>
                 <span className='text-xs font-semibold text-neutral-900'>what we offer</span>
                 <div className='w-full'>

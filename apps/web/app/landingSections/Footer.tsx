@@ -2,9 +2,10 @@ import React from 'react'
 
 function Footer() {
     return (
-        <div>
+        <section>
+            dkjj
+        </section>
 
-        </div>
     )
 }
 
