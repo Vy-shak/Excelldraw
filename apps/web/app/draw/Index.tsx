@@ -49,23 +49,23 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
         ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
     }
     shapes.map((item) => {
-        const { type, startX, startY, width, height, radius, text }: storeT = item
+        const { startX, startY }: storeT = item;
         if (item.type === 'rect') {
             ctx!.strokeStyle = 'black';
             ctx!.setLineDash([5, 3]);
-            ctx!.strokeRect(startX, startY, width, height);
+            ctx!.strokeRect(startX, startY,item.width , item.height);
         }
         if (item.type === 'circle') {
             ctx!.strokeStyle = 'black';
             ctx!.beginPath();
-            ctx!.arc(startX, startY, radius, 0, 6.283);
+            ctx!.arc(startX, startY, item.radius, 0, 6.283);
             ctx!.stroke();
             ctx!.closePath();
         }
         if (item.type === 'text') {
             ctx!.font = "16px Arial";
             ctx!.fillStyle = "black";
-            ctx!.fillText(text, startX, startY);
+            ctx!.fillText(item.text, startX, startY);
         };
 
         if (item.type === 'pencil') {
@@ -88,11 +88,11 @@ function RenderAll(ctx: CanvasRenderingContext2D, shapes: storeT[]) {
         ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
     }
     shapes.map((item) => {
-        const { type, startX, startY, width, height, radius, text }: storeT = item
+        const { startX, startY, }: storeT = item
         if (item.type === 'rect') {
             ctx!.strokeStyle = 'black';
             ctx!.setLineDash([5, 3]);
-            ctx!.strokeRect(startX, startY, width, height);
+            ctx!.strokeRect(startX, startY, item.width, item.height);
         }
         // if (item.type === 'circle') {
         //     ctx!.strokeStyle = 'black';
@@ -104,21 +104,9 @@ function RenderAll(ctx: CanvasRenderingContext2D, shapes: storeT[]) {
         if (item.type === 'text') {
             ctx!.font = "16px Arial";
             ctx!.fillStyle = "black";
-            ctx!.fillText(text, startX, startY);
+            ctx!.fillText(item.text, startX, startY);
         };
 
-        // if (item.type === 'pencil') {
-        //     ctx!.strokeStyle = 'black';
-        //     console.log("the itemspencil", item)
-        //     ctx!.beginPath();
-        //     ctx!.moveTo(item.startX, item.startY);
-        //     item.endPoints.map((val) => {
-        //         console.log(val.endX, val.endY)
-        //         ctx!.lineTo(val.endX, val.endY)
-        //     })
-        //     ctx?.stroke()
-        //     ctx!.closePath()
-        // }
     })
 }
 
