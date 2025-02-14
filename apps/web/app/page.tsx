@@ -4,22 +4,22 @@ function page() {
   return (
     <section className='w-full'>
       <Navbar />
-      <section className='w-full gap-y-6 px-4'>
-        <section>
+      <section className='w-full  px-4'>
+        <section className='w-full'>
           <Hero />
-        </section>
-        <section>
+        </section  >
+        <section className='w-full'>
           <Video />
         </section>
-        <section>
+        <section className='w-full'>
           <Product />
-        </section>
-        <section>
+        </section >
+        <section className='w-full'>
           <Pricing />
         </section>
-        <section>
+        <section className='w-full'>
           <Footer />
-        </section>
+        </section >
       </section>
     </section >
   )

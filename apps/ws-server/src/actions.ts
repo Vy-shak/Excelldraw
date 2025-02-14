@@ -88,7 +88,8 @@ const addtoroom = (socket: WebSocket, roomDetails: parseValidation, store: Map<s
         store.get(roomCode)!.sockets.map((item) => {
             if (item.userId === userId) {
                 exist = true
-                item = { userId: userId, roomname: roomCode, socket: socket, profileUrl: imgUrl }
+                console.log("socket coming")
+                item = { userId: userId, roomname: roomname, socket: socket, profileUrl: imgUrl }
             }
         });
         if (!exist) {

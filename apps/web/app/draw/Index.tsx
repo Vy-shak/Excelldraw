@@ -82,6 +82,45 @@ function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
         }
     })
 }
+function RenderAll(ctx: CanvasRenderingContext2D, shapes: storeT[]) {
+
+    if (shapes.length < 1) {
+        ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
+    }
+    shapes.map((item) => {
+        const { type, startX, startY, width, height, radius, text }: storeT = item
+        if (item.type === 'rect') {
+            ctx!.strokeStyle = 'black';
+            ctx!.setLineDash([5, 3]);
+            ctx!.strokeRect(startX, startY, width, height);
+        }
+        // if (item.type === 'circle') {
+        //     ctx!.strokeStyle = 'black';
+        //     ctx!.beginPath();
+        //     ctx!.arc(startX, startY, radius, 0, 6.283);
+        //     ctx!.stroke();
+        //     ctx!.closePath();
+        // }
+        if (item.type === 'text') {
+            ctx!.font = "16px Arial";
+            ctx!.fillStyle = "black";
+            ctx!.fillText(text, startX, startY);
+        };
+
+        // if (item.type === 'pencil') {
+        //     ctx!.strokeStyle = 'black';
+        //     console.log("the itemspencil", item)
+        //     ctx!.beginPath();
+        //     ctx!.moveTo(item.startX, item.startY);
+        //     item.endPoints.map((val) => {
+        //         console.log(val.endX, val.endY)
+        //         ctx!.lineTo(val.endX, val.endY)
+        //     })
+        //     ctx?.stroke()
+        //     ctx!.closePath()
+        // }
+    })
+}
 
 function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socket: WebSocket, roomcode: string) {
     console.log("we got socket i shape", socket)
@@ -147,7 +186,7 @@ function startDraw(canvas: HTMLCanvasElement, selectedTool: string | null, socke
             ctx!.setLineDash([5, 3]);
             ctx!.lineJoin = 'round';
             ctx!.clearRect(0, 0, window.innerWidth, window.innerHeight);
-
+            RenderAll(ctx, globalshapes)
             renderpencil(ctx)
 
             if (selectedTool === 'rect') {
