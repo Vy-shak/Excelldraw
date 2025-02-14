@@ -1,7 +1,5 @@
 import React from 'react'
 import Button from '../general/Button'
-import axios from 'axios'
-import { MessageCircle } from "lucide-react"
 import useRoomdata from '../../lib/stateStore/userStore'
 import Members from './Members'
 

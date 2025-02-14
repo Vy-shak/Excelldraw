@@ -1,6 +1,3 @@
-import Roomcode from "../../components/canvas/Roomcode";
-
-
 interface pencilPoints {
     endX: number, endY: number
 }
@@ -36,7 +33,7 @@ let globalPencil: any[] = [];
 
 function renderpencil(ctx: CanvasRenderingContext2D) {
 
-};
+}
 
 
 function Socketmsg(canvas: HTMLCanvasElement, shapes: storeT[]) {
@@ -94,13 +91,7 @@ function RenderAll(ctx: CanvasRenderingContext2D, shapes: storeT[]) {
             ctx!.setLineDash([5, 3]);
             ctx!.strokeRect(startX, startY, item.width, item.height);
         }
-        // if (item.type === 'circle') {
-        //     ctx!.strokeStyle = 'black';
-        //     ctx!.beginPath();
-        //     ctx!.arc(startX, startY, radius, 0, 6.283);
-        //     ctx!.stroke();
-        //     ctx!.closePath();
-        // }
+
         if (item.type === 'text') {
             ctx!.font = "16px Arial";
             ctx!.fillStyle = "black";
